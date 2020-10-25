@@ -9,8 +9,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Team Members
 
-* Binaya Shrestha
+* Molly Buckler
 
+* Armando Castillo
+
+* Binaya Shrestha
 
 * Dongming Li
 
