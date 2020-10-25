@@ -1,0 +1,7 @@
+https://www.kaggle.com/sobhanmoosavi/us-weather-events
+
+This is a countrywide weather events dataset with more than 5 million events, 
+which covers 49 states of the United States. Examples of weather events are rain, 
+snow, storm, and freezing condition. The data is collected from January 2016 to 
+December 2019, using historical weather reports that exist for airport-based weather 
+stations across the country.
