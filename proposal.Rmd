@@ -50,6 +50,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Project plan
 
+* We will average the weather data and use it to compare to the Lyme disease data set. We will also use the individual data sets along with the averaged weather data to answer the questions below.
+
 * Questions:
 
   * Is there any association with the rate of Lyme disease and the changes to temperature?
