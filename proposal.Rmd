@@ -1,0 +1,26 @@
+---
+title: "proposal"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Team Members
+
+* Binaya Shrestha
+
+* 
+
+## Data set
+
+* Link: 
+
+## Data set overview
+
+* 
+
+## Project plan
+
+* 
