@@ -11,8 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * Binaya Shrestha
 
-* 
-
+* Dongming Li
 
 
 
