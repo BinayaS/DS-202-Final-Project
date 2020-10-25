@@ -36,7 +36,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Data set overview
 
-* 
+* Weather data
+
+  * 'description'
+  
+
+* lyme disease data
+
+  * 'description'
 
 
 
