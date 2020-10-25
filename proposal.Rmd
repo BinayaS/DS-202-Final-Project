@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * John Langenwalter
 
-
+* Muhamad-Imran-Bin Maszeri
 
 
 
@@ -27,9 +27,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Links: 
 
-* https://docs.opendata.aws/noaa-ghcn-pds/readme.html (weather data)
+* https://docs.opendata.aws/noaa-ghcn-pds/readme.html (Weather data)
 
-* https://data.cdc.gov/dataset/LymeDisease_9211_county/smai-7mz9 (lyme disease data)
+* https://data.cdc.gov/dataset/LymeDisease_9211_county/smai-7mz9 (Lyme disease data)
 
 
 
@@ -38,16 +38,26 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * Weather data
 
-  * 'description'
+  * Contains the max and min temp. and precipitation rates for any given day.
   
 
-* lyme disease data
+* Lyme disease data
 
-  * 'description'
+  * Contains confirmed cases of Lyme disease within four year spans. The years that it spans are 1992-1996, 1997-2001, 2002-2006, and 2007-2011.
 
 
 
 
 ## Project plan
 
-* 
+* Questions:
+
+  * Is there any association with the rate of Lyme disease and the changes to temperature?
+  
+  * Is there any association with the rate of Lyme disease and the changes to precipitation?
+
+  * Has Lyme disease increased from 1992?
+  
+  * What changes have happened to the rate of precipitation?
+  
+  * What changes have happened to the average temperature?
