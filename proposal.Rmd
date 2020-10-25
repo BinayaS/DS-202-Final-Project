@@ -25,7 +25,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Data set
 
-* Link: 
+### Links: 
+
+* https://docs.opendata.aws/noaa-ghcn-pds/readme.html (weather data)
+
+* https://data.cdc.gov/dataset/LymeDisease_9211_county/smai-7mz9 (lyme disease data)
 
 
 
