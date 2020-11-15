@@ -63,3 +63,7 @@ knitr::opts_chunk$set(echo = TRUE)
   * What changes have happened to the rate of precipitation?
   
   * What changes have happened to the average temperature?
+  
+  * Which states have the highest rate of Lyme Disease?
+  
+  * Does the Lyme Disease rate in the states influenced by the weather?
