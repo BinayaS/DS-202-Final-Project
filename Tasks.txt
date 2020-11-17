@@ -7,3 +7,17 @@ Lyme Disease Cleanup (Binaya)
 Questions that focus on mapping (Muhamad)
 
 Comparison between the years in the Weather data(Dongming)
+
+---------------------------------------------------------------------------------------------------
+
+Is there any association with the rate of Lyme disease and the changes to temperature? ()
+
+Is there any association with the rate of Lyme disease and the changes to precipitation? ()
+
+Has Lyme disease increased from 1992? (Jack)
+
+What state has the most lyme disease cases? (Binaya)
+
+What changes have happened to the rate of precipitation? (Molly)
+
+What changes have happened to the average temperature? (DongmingLi)
