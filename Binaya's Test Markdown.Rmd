@@ -80,10 +80,10 @@ library(mapproj)
 #---Map Data For Lyme Disease First Data Set---
   LDdataM <- left_join(LDdataStates, states, by=c("StateName" = "region"))
   
-  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1992_1996)) + geom_polygon(color = NA) + coord_map()
-  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1997_2001)) + geom_polygon(color = NA) + coord_map()
-  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2002_2006)) + geom_polygon(color = NA) + coord_map()
-  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2007_2011)) + geom_polygon(color = NA) + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1992_1996)) + geom_polygon(color = "grey") + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1997_2001)) + geom_polygon(color = "grey") + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2002_2006)) + geom_polygon(color = "grey") + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2007_2011)) + geom_polygon(color = "grey") + coord_map()
 
 ```
 
@@ -125,16 +125,16 @@ library(mapproj)
   #---Confirmed Count TOtal For Each State---
   
     #---1992 to 1996---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1992_1996") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1992-1996")
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1992_1996") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1992-1996") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
     
     #---1997 to 2001---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1997_2001") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1997-2001")
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1997_2001") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1997-2001") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
     
     #---2002 to 2006---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2002_2006") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2002-2006")
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2002_2006") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2002-2006") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
     
     #---2007 to 2011---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2007_2011") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2007-2011")
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2007_2011") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2007-2011") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
 
     #---All Periods Together---
     LDdataG %>% ggplot(aes(x = StateName, y = Count, fill = ConfirmedCount)) + geom_bar(stat = "identity", position = 'dodge') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases By State and Period")
