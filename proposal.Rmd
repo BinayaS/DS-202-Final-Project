@@ -71,6 +71,21 @@ library(readxl)
   * What changes have happened to the rate of precipitation?
   
   * What changes have happened to the average temperature?
+```{r message=FALSE, warning=FALSE}
+Temp<-read.csv("AveTempState.csv")
+Temp %>%
+  group_by(State) %>%
+  ggplot(aes(x=Year,y=Ave_Temp),fill=State) + geom_line() + facet_wrap(~State) +
+  labs(title = "Changes of Average Temperature in 50 states over 20 years") +
+  theme(plot.title = element_text(hjust = 0.5))
+Temp2<-Temp %>%
+  group_by(State)%>%
+  summarise(Ave_Temp=mean(Ave_Temp))
+ggplot(Temp2,aes(y=reorder(State,Ave_Temp),weight=Ave_Temp)) + geom_bar() + 
+  labs(title = "Average Temperature of 50 states over 20 years",x="Temperature",y="State") + 
+  theme(plot.title = element_text(hjust = 0.5),axis.title.x = element_text(face = "bold"),axis.title.y = element_text(face = "bold"),axis.text.y = element_text(size=10, face="bold", colour = "black"))
+
+```
   
   * Which states have the highest rate of Lyme Disease?
 ```{r message=FALSE, warning=FALSE}
