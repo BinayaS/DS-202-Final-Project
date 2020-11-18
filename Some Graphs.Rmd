@@ -70,7 +70,12 @@ sumLyme <- sums %>% filter(str_detect(Measure, "^lyme"))
 ggplot(data = sumLyme, aes(x=Measure, y=Total)) + geom_bar(stat = "identity")
 ```
 ```{r}
-avgLyme$Measure <- as.factor(avgLyme$Measure)
+sumLyme$Measure <- as.factor(avgLyme$Measure)
+
+sumLyme$Measure <- factor(sumLyme$Measure, levels = c("lyme9296", "lyme9701", "lyme0206", "lyme0711"))
+
+ggplot(sumLyme, aes(x=Measure, y=Total, color = "darkblue")) +
+  geom_bar(stat = "identity")
 ```
 
 
@@ -97,7 +102,7 @@ avgPrec$Measure <- as.factor(avgPrec$Measure)
 
 avgPrec$Measure <- factor(avgPrec$Measure, levels = c("prec9296", "prec9701", "prec0206", "prec0711"))
 
-ggplot(avgTemp, aes(x=Measure, y=Average)) +
+ggplot(avgPrec, aes(x=Measure, y=Average)) +
   geom_bar(stat = "identity")
 ```
 
