@@ -14,10 +14,12 @@ library(maps)
 library(mapproj)
 ```
 
+## Loading and preping data
+
 ```{r, warning=FALSE, message=FALSE}
 #---Get And Clean Data---
 
-  #---Lyme Disease---
+  #---Lyme Disease First Data Set---
     LDFfile <- "D:\\Personal Files\\School Work 2020 Fall\\Ds 202\\DS-202-Final-Project\\Data sets\\LymeDisease_9211_county (1).csv"
     LDdata <- read.csv(LDFfile)
     LDdata[is.na(LDdata)] <- 0
@@ -33,13 +35,49 @@ library(mapproj)
       ConfirmedCount_2002_2006 = sum(ConfirmedCount_2002_2006),
       ConfirmedCount_2007_2011 = sum(ConfirmedCount_2007_2011))
   
+    #---Lyme Disease Second Data Set---
+    LDFCfile <- "D:\\Personal Files\\School Work 2020 Fall\\Ds 202\\DS-202-Final-Project\\Data sets\\LD-Case-Counts-by-County-00-18.csv"
+    LDCdata <- read.csv(LDFCfile)
+    LDCdata$Ctyname <- str_remove(LDCdata$Ctyname, " County")
+    LDCdata$Stname <- tolower(LDCdata$Stname)
+    LDCdata$Ctyname <- tolower(LDCdata$Ctyname)
+    
+    LDCPivoted <- LDCdata %>% pivot_longer(names_to = "CasesByYear", values_to = "Count", cols = c(
+      Cases2000, 
+      Cases2001,
+      Cases2002,
+      Cases2003,
+      Cases2004, 
+      Cases2005,
+      Cases2006,
+      Cases2007,
+      Cases2008, 
+      Cases2009,
+      Cases2010,
+      Cases2011,
+      Cases2012, 
+      Cases2013,
+      Cases2014,
+      Cases2015,
+      Cases2016,
+      Cases2017,
+      Cases2018))
+    
+    LDCStates <- LDCPivoted %>% group_by(Stname, CasesByYear) %>% summarise(CasesTotal = sum(Count))
+    LDCStates <- LDCStates %>% pivot_wider(names_from = "CasesByYear", values_from = "CasesTotal")
+    
+    LDCCounties <- LDCPivoted %>% group_by(Ctyname, CasesByYear) %>% summarise(CasesTotal = sum(Count))
+    LDCCounties <- LDCCounties %>% pivot_wider(names_from = "CasesByYear", values_from = "CasesTotal")
+    
 #---Get State Data For Maps
   states <- map_data("state")
   county <- map_data("county")
 ```
 
+## Map Data For Lyme Disease First Data Set
+
 ```{r, warning=FALSE, message=FALSE}
-#---Map Data For Lyme Disease---
+#---Map Data For Lyme Disease First Data Set---
   LDdataM <- left_join(LDdataStates, states, by=c("StateName" = "region"))
   
   LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1992_1996)) + geom_polygon(color = NA) + coord_map()
@@ -49,9 +87,31 @@ library(mapproj)
 
 ```
 
+## Map Data For Lyme Disease Second Data Set
+
+```{r, warning=FALSE, message=FALSE}
+#---Map Data For Lyme Disease Second Data Set---
+  LDdataM <- left_join(LDCStates, states, by=c("Stname" = "region"))
+  
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = Cases2000)) + geom_polygon(color = NA) + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = Cases2006)) + geom_polygon(color = NA) + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = Cases2011)) + geom_polygon(color = NA) + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = Cases2018)) + geom_polygon(color = NA) + coord_map()
+
+```
+
+```{r, warning=FALSE, message=FALSE}
+#---Map Data For Lyme Disease Second Data Set Counties---
+  LDdataM <- right_join(LDCCounties, county, by=c("Ctyname" = "subregion"))
+  
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group)) + geom_polygon(data = LDdataM, aes(fill = Cases2018)) + coord_map()
+
+```
+
+## Graph Data For Lyme Disease First Data Set
 
 ```{r message=FALSE, warning=FALSE}
-#---Graph Data For Lyme Disease---
+#---Graph Data For Lyme Disease First Data Set---
   LDdataG <- LDdataStates
   LDdataG <- LDdataG %>% pivot_longer(names_to = "ConfirmedCount", values_to = "Count", cols = c(
     ConfirmedCount_1992_1996, 
@@ -60,24 +120,24 @@ library(mapproj)
     ConfirmedCount_2007_2011))
   
   #---Confirmed Count Total For Each Period---
-  LDdataG %>% ggplot(aes(x = ConfirmedCount, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5))
+  LDdataG %>% ggplot(aes(x = ConfirmedCount, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases Sum by Period")
   
   #---Confirmed Count TOtal For Each State---
   
     #---1992 to 1996---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1992_1996") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5))
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1992_1996") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1992-1996")
     
     #---1997 to 2001---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1997_2001") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5))
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1997_2001") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1997-2001")
     
     #---2002 to 2006---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2002_2006") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5))
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2002_2006") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2002-2006")
     
     #---2007 to 2011---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2007_2011") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5))
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2007_2011") %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2007-2011")
 
     #---All Periods Together---
-    LDdataG %>% ggplot(aes(x = StateName, y = Count, fill = ConfirmedCount)) + geom_bar(stat = "identity", position = 'dodge') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5))
+    LDdataG %>% ggplot(aes(x = StateName, y = Count, fill = ConfirmedCount)) + geom_bar(stat = "identity", position = 'dodge') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases By State and Period")
     LDdataG %>% ggplot(aes(x = StateName, weight = Count)) + geom_bar() + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + facet_wrap(~ConfirmedCount)
   
 ```
