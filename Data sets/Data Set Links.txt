@@ -15,3 +15,7 @@ Dataset containing information on the influenza virus in California from 2009 to
 * https://www.kaggle.com/imdevskp/corona-virus-report (Covid 19 Folder)
 
 Data about covid 19
+
+* https://www.cdc.gov/lyme/stats/tables.html (LD-Case-Counts-by-County-00-18.csv)
+
+Data about Lyme Disease from 2009 to 2018
