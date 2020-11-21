@@ -1,0 +1,26 @@
+---
+title: "Final_Project_Report"
+author: "Binaya Shrestha, Dongming Li, Molly Buckler, Armando Castillo, John Langenwalter, Muhamad-Imran-Bin Maszeri"
+date: "11/21/2020"
+output: html_document
+---
+
+## Description of background and questions raised
+
+    Background description:
+    Questiion list: 1. Has Lyme disease increased from 1992?(Overall and states)
+                    2. What changes have happened to the average temperature?
+                    3. Is there any association with the rate of Lyme disease and the changes to temperature?
+                    4. What changes have happened to the average temperature?
+                    5. Is there any association with the rate of Lyme disease and the changes to precipitation?
+                    
+
+## The pipeline for obtaining and cleaning the dataset
+
+## The exploratory analysis with a few featured infographics
+
+## Steps for data wrangling and visualization
+
+## Answers to the questions raised
+
+## Conclusion
