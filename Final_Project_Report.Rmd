@@ -192,25 +192,25 @@ library(dplyr)
 library(lubridate)
 library(readxl)
 
-honk <-read.csv("LymeTempPrec.csv")
-View(honk)
+Lym_temp <-read.csv("LymeTempPrec.csv")
+View(Lym_temp)
 
 
 d9296 <- ggplot(aes(x = temp9296, y = lyme9296
-           ), data=honk) + geom_point() + ggtitle('temp vs lyme disease correlation 1992-1996') + xlab('temperature') + ylab('lyme disease cases')
+           ), data=Lym_temp ) + geom_point() + ggtitle('temp vs lyme disease correlation 1992-1996') + xlab('temperature') + ylab('lyme disease cases')
 d9296
 
 d9701 <- ggplot(aes(x = temp9701, y = lyme9701
-           ), data=honk) + geom_point() + ggtitle('temp vs lyme disease correlation 1997-2001') + xlab('temperature') + ylab('lyme disease cases')
+           ), data=Lym_temp ) + geom_point() + ggtitle('temp vs lyme disease correlation 1997-2001') + xlab('temperature') + ylab('lyme disease cases')
 d9701
 
 d0206 <- ggplot(aes(x = temp0206, y = lyme0206
-           ), data=honk) + geom_point() +  ggtitle('temp vs lyme disease correlation 2002-2006')  + xlab('temperature') + ylab('lyme disease cases')
+           ), data=Lym_temp ) + geom_point() +  ggtitle('temp vs lyme disease correlation 2002-2006')  + xlab('temperature') + ylab('lyme disease cases')
 d0206
 
 
 d0711 <- ggplot(aes(x = temp0711, y = lyme0711
-           ), data=honk) + geom_point() +  ggtitle('temp vs lyme disease correlation 2007-2011')  + xlab('temperature') + ylab('lyme disease cases')
+           ), data=Lym_temp ) + geom_point() +  ggtitle('temp vs lyme disease correlation 2007-2011')  + xlab('temperature') + ylab('lyme disease cases')
 d0711
 
 
@@ -221,7 +221,7 @@ Temp %>%
   labs(title = "temp vs lyme")
 
 
-ggplot(honk, aes(x = state, weight = temp9701)) + geom_bar() + coord_flip() + ylab('Temp')
+ggplot(Lym_temp , aes(x = state, weight = temp9701)) + geom_bar() + coord_flip() + ylab('Temp')
 
 
 
