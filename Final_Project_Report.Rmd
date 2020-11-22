@@ -28,7 +28,7 @@ setwd(getwd())
   * We chose lyme disease and weather data sets because it is known that lyme disease is carried by ticks. There may be some correlation between the disease and weather patterns such as precipitation since tick are exposed to the weather given their habitat and it could have an effect on the ticks population each year.
 
 
-## Lyme Disease Background
+### Lyme Disease Background
 
 __According to the CDC:__
 
@@ -45,7 +45,7 @@ __According to the CDC:__
 * Symptoms can include flu like symptoms as well as a bulls eye like rash
 
 
-## Data Sets
+### Data Sets
 
 * __Lyme Disease from 1992 - 2011__
   
