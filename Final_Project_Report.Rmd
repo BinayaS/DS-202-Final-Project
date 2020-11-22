@@ -289,3 +289,103 @@ ggplot(honk, aes(x = state, weight = temp9701)) + geom_bar() + coord_flip() + yl
 ```
 
 
+
+* Which states have the highest rate of Lyme Disease?
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#stack bar for region
+region <- read.csv("cumLymeReport_2007_2011_byRegion.csv")
+region <- region %>%
+  mutate(area=ï..Areas) %>%
+  select(!ï..Areas)
+
+regionpiv <- region %>%
+  pivot_longer(!area, names_to="cumu", values_to="value")
+#str(regionpiv)
+
+regionpiv %>%
+  ggplot(aes(fill=cumu, y=value, x=reorder(area, value))) + 
+    geom_bar(position="stack", stat="identity") + coord_flip() + labs(title="52-week Cumulative of Lyme Disease cases by US Region", y="Total cases", x="Region") + scale_fill_discrete(name = "Cumulative cases per year", labels = c("2007", "2008", "2009", "2010", "2011"))
+
+#for state
+USA_states <- map_data("state")
+sName <- USA_states %>%
+  mutate(region=str_to_title(USA_states$region))
+
+temp2 <- read.csv("LymeTempPrec2.csv")
+ltp <- temp2 %>%
+  mutate(region=full) %>%
+  select(!c('full'))
+
+ltp2 <- ltp %>%
+  filter(lyme0711>1000)
+
+ltpmap <- ltp %>% left_join(sName, by="region")
+ltp2map <- ltp2 %>% left_join(sName, by="region")
+sText <- ltp2map %>% group_by(region, state) %>% summarise(long=mean(long), lat=mean(lat))
+  
+ggplot() + geom_path(data=ltpmap,
+                        aes(x=long, y=lat, group=group)) +
+  geom_polygon(data=ltp2map,
+                aes(x=long, y=lat, group=group, fill=lyme0711)) +
+  scale_fill_continuous(low='tomato', high='darkred', guide='colorbar') +
+  coord_map() +
+  geom_text(data=sText, 
+            aes(x=long, y=lat, label=state), color='black') +
+  labs(title="US States With > 1000 Cases", fill="Total Cases")
+
+#for county
+
+USA_counties <- map_data("county")
+cName <- USA_counties %>%
+  mutate(subregion=str_to_title(subregion))
+
+count1 <- read.csv("Data Sets/LymeDisease_9211_county (1).csv")
+countClean <- count1 %>% 
+  separate(CountyName, c("subregion", "county")) %>%
+  filter(!CountyCode==0) %>%
+  mutate(county=str_replace(county, "County", "")) %>%
+  unite('subregion',subregion:county,sep=" ") %>%
+  mutate(subregion=trimws(gsub("\\s+", " ", subregion))) %>%
+  mutate(c711=replace_na(ConfirmedCount_2007_2011, 0))
+
+countCleanSum <- countClean %>%
+  group_by(subregion) %>%
+  summarise(c711=sum(c711)) %>%
+  arrange(desc(c711))
+
+countCleanMap <- countCleanSum %>% 
+  left_join(cName, by='subregion') %>% 
+  filter(c711>100)
+
+countCleanMap <- countCleanMap %>%
+  filter(region %in% c('minnesota', 'wisconsin', 'virginia', 'maryland', 'pennsylvania', 'new jersey', 'new york', 'connecticut', 'massachusetts', 'maine', 'vermont', 'new hampshire', 'delaware'))
+
+ggplot() + geom_path(data=ltp2map,
+                        aes(x=long, y=lat, group=group)) +
+  geom_polygon(data=countCleanMap,
+                aes(x=long, y=lat, group=group, fill=c711), color='black') +
+  scale_fill_continuous(low='tomato', high='darkred', guide='colorbar') +
+  coord_map() +
+  labs(title="US Counties With > 100 Cases In The Northeast Central Region", fill="Total cases")
+
+
+```
+
+  
+* Does the Lyme Disease rate in the states influenced by the weather?
+
+```{r message=FALSE, warning=FALSE}
+ltp %>%
+  left_join(sName, by="region") %>%
+  ggplot(aes(x=long, y=lat, fill=temp0711)) + geom_polygon(aes(group=group)) + coord_map() + 
+  scale_fill_continuous(low='tan1', high='darkred', guide='colorbar') +
+  labs(title="Temperature Levels in US", fill="Temp (F)")
+
+ltp %>%
+  left_join(sName, by="region") %>%
+  ggplot(aes(x=long, y=lat, fill=prec0711)) + geom_polygon(aes(group=group)) + coord_map() +
+  scale_fill_continuous(low='lightcyan2', high='blue', guide='colorbar') +
+  labs(title="Precipitation Levels in US", fill="Prec (inch)")
+```  
+
