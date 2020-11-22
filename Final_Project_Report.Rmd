@@ -237,11 +237,14 @@ new %>%
 
 ## Scatterplot to show what temperatures the most cases occur at
 
+<<<<<<< HEAD
 
 ## Answers to the questions raised
 
 ## Conclusion
 
+=======
+>>>>>>> ce00f3bbc2282f14f662fa252d251da61cdbd7dd
 ## Grahps for temperature and number of lyme dieases cases
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
@@ -451,3 +454,8 @@ ltp %>%
   labs(title="Precipitation Levels in US", fill="Prec (inch)")
 ```  
 
+## Answers to the questions raised
+We found that areas with lower temperatures and higher levels of precipitation were where most of the cases occurred. Around 60 degrees farenheit was the peak temperature throughout every year. States matching this description were mostly in the northeast.
+
+
+## Conclusion
