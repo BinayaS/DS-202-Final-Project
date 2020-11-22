@@ -15,6 +15,7 @@ library(rvest)
 library(scales)
 library(reshape)
 library(RColorBrewer)
+setwd(getwd())
 ```
 
 ## Description of background and questions raised
@@ -72,7 +73,7 @@ ggplot(Temp3,aes(x=Year,y=Ave_Temp)) + geom_point(color="black") + stat_smooth(m
 ```{r}
 library(readr)
 library(ggplot2)
-LymeTempPrec<- read_csv("~/Documents/GitHub/DS-202-Final-Project/LymeTempPrec3.csv")
+LymeTempPrec<- read_csv("./LymeTempPrec3.csv")
 head(LymeTempPrec)
 ```
 
