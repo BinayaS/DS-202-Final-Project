@@ -437,7 +437,9 @@ ltp %>%
 ```  
 
 ## Answers to the questions raised
-We found that areas with lower temperatures and higher levels of precipitation were where most of the cases occurred. Around 60 degrees farenheit was the peak temperature throughout every year. States matching this description were mostly in the northeast.
+We found that areas with lower temperatures and higher levels of precipitation were where most of the cases occurred. 
+Around 60 degrees farenheit was the peak temperature throughout every year. 
+States matching this description were mostly in the northeast.
 
 
 ## Conclusion
