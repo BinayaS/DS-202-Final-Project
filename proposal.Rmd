@@ -85,7 +85,7 @@ Temp %>%
 Temp2<-Temp %>%
   group_by(State)%>%
   summarise(Ave_Temp=mean(Ave_Temp))
-ggplot(Temp2,aes(y=reorder(State,Ave_Temp),weight=Ave_Temp)) + geom_bar() + 
+ggplot(Temp2,aes(y=State,weight=Ave_Temp)) + geom_bar() + 
   labs(title = "Average Temperature of 50 states over 20 years",x="Temperature",y="State") + 
   theme(plot.title = element_text(hjust = 0.5),axis.title.x = element_text(face = "bold"),axis.title.y = element_text(face = "bold"),axis.text.y = element_text(size=10, face="bold", colour = "black"))
 

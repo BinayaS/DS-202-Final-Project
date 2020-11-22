@@ -5,21 +5,70 @@ date: "11/21/2020"
 output: html_document
 ---
 
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(readxl)
+library(rvest)
+library(scales)
+library(reshape)
+library(RColorBrewer)
+```
+
 ## Description of background and questions raised
 
     Background description:
     Questiion list: 1. Has Lyme disease increased from 1992?(Overall and states)
-                    2. What changes have happened to the average temperature?
-                    3. Is there any association with the rate of Lyme disease and the changes to temperature?
-                    4. What changes have happened to the average temperature?
-                    5. Is there any association with the rate of Lyme disease and the changes to precipitation?
+                    2. Which states have the highest rate of Lyme Disease?
+                    3. What changes have happened to the average temperature（Overall and states)?
+                    4. Is there any association with the rate of Lyme disease and the changes to temperature?
+                    5. What changes have happened to the average temperature?
+                    6. Is there any association with the rate of Lyme disease and the changes to precipitation?
                     
 
 ## The pipeline for obtaining and cleaning the dataset
 
 ## The exploratory analysis with a few featured infographics
 
+    Temperature part: The change of average temperature in the U.S. and each states may affect the rate of Lymn disease.
+    1. Average Temperature of 50 states over 20 years
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Temp<-read.csv("AveTempState.csv")
+Temp2<-Temp %>%
+  group_by(State)%>%
+  summarise(Ave_Temp=mean(Ave_Temp))
+ggplot(Temp2,aes(y=State,weight=Ave_Temp)) + geom_bar() + 
+  labs(title = "Average Temperature of 50 states over 20 years",x="Temperature",y="State") + 
+  theme(plot.title = element_text(hjust = 0.5),axis.title.x = element_text(face = "bold"),axis.title.y = element_text(face = "bold"),axis.text.y = element_text())
+
+```
+
+    2. Average Temperature in the U.S.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Temp3<- Temp%>%
+  group_by(Year)%>%
+  summarise(Ave_Temp=mean(Ave_Temp))
+ggplot(Temp3,aes(x=Year,weight=Ave_Temp)) + geom_bar() +
+  labs(title = "Average Temperature over 20 years") + theme(plot.title = element_text(hjust = 0.5))
+```
 ## Steps for data wrangling and visualization
+
+    Temperature part:
+    1. See how has the average temperature in the United States changed over 20 years.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(Temp3,aes(x=Year,y=Ave_Temp)) + geom_point(color="black") + stat_smooth(method = "lm", col = "red")+
+  labs(title = "Average Temperature changes over 20 years") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+    
+    2. See correlation between Temp and Lymn disease.
+
+
+
+
+
 
 ## Answers to the questions raised
 
