@@ -8,7 +8,7 @@ output: html_document
 ```{r}
 library(readr)
 library(ggplot2)
-LymeTempPrec<- read_csv("~/Documents/GitHub/DS-202-Final-Project/LymeTempPrec2.csv")
+LymeTempPrec<- read_csv("~/Documents/GitHub/DS-202-Final-Project/LymeTempPrec3.csv")
 head(LymeTempPrec)
 ```
 
@@ -133,5 +133,9 @@ Lyme disease typically happens around the 60 degrees range. cleaned for better f
 ```{r}
 new %>%
   ggplot(aes(x=temp, y=lyme, color=date)) + geom_point()
+```
+
+```{r}
+sum(sumLyme$Total)
 ```
 
