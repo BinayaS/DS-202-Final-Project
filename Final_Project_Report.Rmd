@@ -15,6 +15,7 @@ library(rvest)
 library(scales)
 library(reshape)
 library(RColorBrewer)
+library(stringr)
 setwd(getwd())
 ```
 
@@ -71,8 +72,6 @@ ggplot(Temp3,aes(x=Year,y=Ave_Temp)) + geom_point(color="black") + stat_smooth(m
 ## Graphs made for correlation of temperature, precipitation, and # of cases
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(readr)
-library(ggplot2)
 LymeTempPrec<- read_csv("./LymeTempPrec3.csv")
 head(LymeTempPrec)
 ```
@@ -81,7 +80,6 @@ head(LymeTempPrec)
 Found averages
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(dplyr)
 means<-LymeTempPrec %>%
   summarise_at(vars(-state, -full), funs(mean(., na.rm=TRUE)))
 head(means)
@@ -90,7 +88,6 @@ head(means)
 ##Pivoted the data
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(tidyr)
 means<- means %>%
   pivot_longer(everything(),names_to = "Measure", values_to = "Average")
 head(means)
@@ -98,7 +95,6 @@ head(means)
 ##Plotted average Lyme
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(stringr)
 avgLyme <- means %>% filter(str_detect(Measure, "^lyme"))
 ggplot(data = avgLyme, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
