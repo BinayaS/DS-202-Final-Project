@@ -176,10 +176,6 @@ new %>%
 ```
 ## Scatterplot to show what temperatures the most cases occur at
 
-## Answers to the questions raised
-
-## Conclusion
-
 ## Grahps for temperature and number of lyme dieases cases
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
@@ -389,3 +385,6 @@ ltp %>%
   labs(title="Precipitation Levels in US", fill="Prec (inch)")
 ```  
 
+## Answers to the questions raised
+
+## Conclusion
