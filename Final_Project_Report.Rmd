@@ -19,15 +19,66 @@ library(stringr)
 setwd(getwd())
 ```
 
-## Description of background and questions raised
+## Introduction
 
-    Background description:
-    Questiion list: 1. Has Lyme disease increased from 1992?(Overall and states)
-                    2. Which states have the highest rate of Lyme Disease?
-                    3. What changes have happened to the average temperature（Overall and states)?
-                    4. Is there any association with the rate of Lyme disease and the changes to temperature?
-                    5. What changes have happened to the average temperature?
-                    6. Is there any association with the rate of Lyme disease and the changes to precipitation?
+* We are exploring two separate data sets and have combined the findings between them to see if there is any correlation between the two.
+
+* Application
+
+  * We chose lyme disease and weather data sets because it is known that lyme disease is carried by ticks. There may be some correlation between the disease and weather patterns such as precipitation since tick are exposed to the weather given their habitat and it could have an effect on the ticks population each year.
+
+
+### Lyme Disease Background
+
+__According to the CDC:__
+
+* Lyme disease is a deer tick borne illness
+
+* Lyme disease is the most common vector-borne disease in the United States
+
+* Ticks usually lives outdoors, in tall grass or forest  
+
+* Transferred from tick to mammals through their bites
+
+* Lyme disease is a bacteria 
+
+* Symptoms can include flu like symptoms as well as a bulls eye like rash
+
+
+### Data Sets
+
+* __Lyme Disease from 1992 - 2011__
+  
+  * Data set obtained from the CDC in csv format
+  
+  * Contains Lyme disease case data for counties inside the US from 1992 to 2011
+  
+  * The years are split up into 5 year increments
+
+* __Global Historical Climentallegy daily__
+
+  * Data sets obtained from NOAA in csv format and in txt format
+
+  * Each csv file had the temperature and precipitation for each station every day for one year
+  
+  * Had to get the csv files for 1992 to 2011
+  
+  * The text file included data about the stations in the csv files, it includes which country the station is in, as well as which state the station is in
+
+* __CDC Data Lyme Disease by Region 2007-2011__
+
+  * Data is initially in the form of pdf files separated in each year in a 52 week format
+
+  * Data is scraped from pdf files in each year into a csv format
+
+
+  Background description:
+  Question list:1. Has Lyme disease increased from 1992?(Overall and states)
+                2. Which states have the highest rate of Lyme Disease?
+                3. What changes have happened to the average temperature（Overall and states)?
+                4. Is there any association with the rate of Lyme disease and the changes to temperature?
+                5. What changes have happened to the average temperature?
+                6. Is there any association with the rate of Lyme disease and the changes to precipitation?
                     
 
 ## The pipeline for obtaining and cleaning the dataset
