@@ -169,12 +169,12 @@ new <- new %>%
   pivot_wider(names_from = "measure", values_from = "value")
 head(new)
 ```
-##Lyme disease typically happens around the 60 degrees range. cleaned for better format for the chart.
+## Lyme disease typically happens around the 60 degrees range. cleaned for better format for the chart.
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 new %>%
   ggplot(aes(x=temp, y=lyme, color=date)) + geom_point()
 ```
-##Scatterplot to show what temperatures the most cases occur at
+## Scatterplot to show what temperatures the most cases occur at
 
 ## Answers to the questions raised
 
