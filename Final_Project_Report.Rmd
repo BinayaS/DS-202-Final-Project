@@ -184,6 +184,7 @@ new %>%
 
 
 ## Grahps for temperature and number of lyme dieases cases
+
 ```{r}
 
 library(ggplot2)
@@ -192,25 +193,25 @@ library(dplyr)
 library(lubridate)
 library(readxl)
 
-Lym_temp <-read.csv("LymeTempPrec.csv")
-View(Lym_temp)
+lymetemp <-read.csv("LymeTempPrec.csv")
+View(lymetemp)
 
 
 d9296 <- ggplot(aes(x = temp9296, y = lyme9296
-           ), data=Lym_temp ) + geom_point() + ggtitle('temp vs lyme disease correlation 1992-1996') + xlab('temperature') + ylab('lyme disease cases')
+           ), data=lymetemp) + geom_point() + ggtitle('temp vs lyme disease correlation 1992-1996') + xlab('temperature') + ylab('lyme disease cases')
 d9296
 
 d9701 <- ggplot(aes(x = temp9701, y = lyme9701
-           ), data=Lym_temp ) + geom_point() + ggtitle('temp vs lyme disease correlation 1997-2001') + xlab('temperature') + ylab('lyme disease cases')
+           ), data=lymetemp) + geom_point() + ggtitle('temp vs lyme disease correlation 1997-2001') + xlab('temperature') + ylab('lyme disease cases')
 d9701
 
 d0206 <- ggplot(aes(x = temp0206, y = lyme0206
-           ), data=Lym_temp ) + geom_point() +  ggtitle('temp vs lyme disease correlation 2002-2006')  + xlab('temperature') + ylab('lyme disease cases')
+           ), data=lymetemp) + geom_point() +  ggtitle('temp vs lyme disease correlation 2002-2006')  + xlab('temperature') + ylab('lyme disease cases')
 d0206
 
 
 d0711 <- ggplot(aes(x = temp0711, y = lyme0711
-           ), data=Lym_temp ) + geom_point() +  ggtitle('temp vs lyme disease correlation 2007-2011')  + xlab('temperature') + ylab('lyme disease cases')
+           ), data=lymetemp) + geom_point() +  ggtitle('temp vs lyme disease correlation 2007-2011')  + xlab('temperature') + ylab('lyme disease cases')
 d0711
 
 
@@ -221,9 +222,8 @@ Temp %>%
   labs(title = "temp vs lyme")
 
 
-ggplot(Lym_temp , aes(x = state, weight = temp9701)) + geom_bar() + coord_flip() + ylab('Temp')
-
-
+ggplot(lymetemp, aes(x = state, weight = temp9701)) + geom_bar() + coord_flip() + ylab('Temp')
+  
 
 
 ```
