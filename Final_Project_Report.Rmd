@@ -75,19 +75,19 @@ ggplot(Temp3,aes(x=Year,y=Ave_Temp)) + geom_point(color="black") + stat_smooth(m
     2. See correlation between Temp and Lymn disease.
       Graphs made for correlation of temperature, precipitation, and # of cases
 
-<<<<<<< HEAD
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(readr)
 library(ggplot2)
 LymeTempPrec<- read_csv("LymeTempPrec3.csv")
-=======
+```
 
 
 ## Graphs made for correlation of temperature, precipitation, and # of cases
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 LymeTempPrec<- read_csv("./LymeTempPrec3.csv")
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 head(LymeTempPrec)
 ```
 
@@ -95,10 +95,9 @@ head(LymeTempPrec)
     Found averages
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-<<<<<<< HEAD
+
 library(dplyr)
-=======
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 means<-LymeTempPrec %>%
   summarise_at(vars(-state, -full), funs(mean(., na.rm=TRUE)))
 head(means)
@@ -109,16 +108,17 @@ head(means)
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyr)
-=======
+```
+
 ##Pivoted the data
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 means<- means %>%
   pivot_longer(everything(),names_to = "Measure", values_to = "Average")
 head(means)
 ```
-<<<<<<< HEAD
+
     
     Plotted average Lyme
 
@@ -128,37 +128,36 @@ avgLyme <- means %>% filter(str_detect(Measure, "^lyme"))
 ggplot(data = avgLyme, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
 
-=======
+
 ##Plotted average Lyme
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgLyme <- means %>% filter(str_detect(Measure, "^lyme"))
 ggplot(data = avgLyme, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
+
 ##Plotted average Temperature
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgTemp <- means %>%
   filter(str_detect(Measure, "^temp"))
 ggplot(data = avgTemp, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
-<<<<<<< HEAD
 
-=======
+
 ##Plotted average Prec
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgPrec <- means %>%
   filter(str_detect(Measure, "^prec"))
 ggplot(data = avgPrec, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
-<<<<<<< HEAD
-    
+
     Found sums
     
-=======
+
 ##Found sums
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 sums<-LymeTempPrec %>%
   summarise_at(vars(-state, -full), funs(sum(., na.rm=TRUE)))
@@ -170,10 +169,9 @@ sums<- sums %>%
 sumLyme <- sums %>% filter(str_detect(Measure, "^lyme"))
 ggplot(data = sumLyme, aes(x=Measure, y=Total)) + geom_bar(stat = "identity")
 ```
-<<<<<<< HEAD
-=======
 
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 sumLyme$Measure <- as.factor(avgLyme$Measure)
 sumLyme$Measure <- factor(sumLyme$Measure, levels = c("lyme9296", "lyme9701", "lyme0206", "lyme0711"))
@@ -183,11 +181,11 @@ ggplot(sumLyme, aes(x=Measure, y=Total, color = "darkblue")) +
 
 
 
-<<<<<<< HEAD
 
-=======
+
+
 ##Reordered the graphs to go in chronological order
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgLyme$Measure <- as.factor(avgLyme$Measure)
 avgLyme$Measure <- factor(avgLyme$Measure, levels = c("lyme9296", "lyme9701", "lyme0206", "lyme0711"))
@@ -224,21 +222,21 @@ new <- new %>%
   pivot_wider(names_from = "measure", values_from = "value")
 head(new)
 ```
-<<<<<<< HEAD
+
     
     Lyme disease typically happens around the 60 degrees range. cleaned for better format for the chart.
     
 =======
 ## Lyme disease typically happens around the 60 degrees range. cleaned for better format for the chart.
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 new %>%
   ggplot(aes(x=temp, y=lyme, color=date)) + geom_point()
 ```
-<<<<<<< HEAD
-=======
+
+
 ## Scatterplot to show what temperatures the most cases occur at
->>>>>>> 8d5ef702f1f8b47f7c246b5aa958933b2d1b8f52
+
 
 ## Answers to the questions raised
 
