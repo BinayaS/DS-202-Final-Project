@@ -176,6 +176,7 @@ head(new)
 ```{r}
 new %>%
   ggplot(aes(x=temp, y=lyme, color=date)) + geom_point()
+```
 ##Scatterplot to show what temperatures the most cases occur at
 
 ## Answers to the questions raised
