@@ -86,7 +86,7 @@ means<-LymeTempPrec %>%
 head(means)
 ```
 
-Pivoted the data
+##Pivoted the data
 
 ```{r}
 library(tidyr)
@@ -94,26 +94,26 @@ means<- means %>%
   pivot_longer(everything(),names_to = "Measure", values_to = "Average")
 head(means)
 ```
-Plotted average Lyme
+##Plotted average Lyme
 
 ```{r}
 library(stringr)
 avgLyme <- means %>% filter(str_detect(Measure, "^lyme"))
 ggplot(data = avgLyme, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
-
+##Plotted average Temperature
 ```{r}
 avgTemp <- means %>%
   filter(str_detect(Measure, "^temp"))
 ggplot(data = avgTemp, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
-
+##Plotted average Prec
 ```{r}
 avgPrec <- means %>%
   filter(str_detect(Measure, "^prec"))
 ggplot(data = avgPrec, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
-Found sums
+##Found sums
 ```{r}
 sums<-LymeTempPrec %>%
   summarise_at(vars(-state, -full), funs(sum(., na.rm=TRUE)))
