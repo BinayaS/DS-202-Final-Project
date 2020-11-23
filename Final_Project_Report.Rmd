@@ -1,0 +1,525 @@
+---
+title: "Final_Project_Report"
+author: "Binaya Shrestha, Dongming Li, Molly Buckler, Armando Castillo, John Langenwalter, Muhamad-Imran-Bin Maszeri"
+date: "11/21/2020"
+output: html_document
+---
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(readxl)
+library(rvest)
+library(scales)
+library(reshape)
+library(RColorBrewer)
+library(stringr)
+setwd(getwd())
+```
+
+## Introduction
+
+* We are exploring two separate data sets and have combined the findings between them to see if there is any correlation between the two.
+
+* Application
+
+  * We chose lyme disease and weather data sets because it is known that lyme disease is carried by ticks. There may be some correlation between the disease and weather patterns such as precipitation since tick are exposed to the weather given their habitat and it could have an effect on the ticks population each year.
+
+
+### Lyme Disease Background
+
+__According to the CDC:__
+
+* Lyme disease is a deer tick borne illness
+
+* Lyme disease is the most common vector-borne disease in the United States
+
+* Ticks usually lives outdoors, in tall grass or forest  
+
+* Transferred from tick to mammals through their bites
+
+* Lyme disease is a bacteria 
+
+* Symptoms can include flu like symptoms as well as a bulls eye like rash
+
+
+### Data Sets
+
+* __Lyme Disease from 1992 - 2011__
+  
+  * Data set obtained from the CDC in csv format
+  
+  * Contains Lyme disease case data for counties inside the US from 1992 to 2011
+  
+  * The years are split up into 5 year increments
+
+* __Global Historical Climentallegy daily__
+
+  * Data sets obtained from NOAA in csv format and in txt format
+
+  * Each csv file had the temperature and precipitation for each station every day for one year
+  
+  * Had to get the csv files for 1992 to 2011
+  
+  * The text file included data about the stations in the csv files, it includes which country the station is in, as well as which state the station is in
+
+* __CDC Data Lyme Disease by Region 2007-2011__
+
+  * Data is initially in the form of pdf files separated in each year in a 52 week format
+
+  * Data is scraped from pdf files in each year into a csv format
+
+
+  Background description:
+  Question list:1. Has Lyme disease increased from 1992?(Overall and states)
+                2. Which states have the highest rate of Lyme Disease?
+                3. What changes have happened to the average temperature（Overall and states)?
+                4. Is there any association with the rate of Lyme disease and the changes to temperature?
+                5. What changes have happened to the average temperature?
+                6. Is there any association with the rate of Lyme disease and the changes to precipitation?
+                    
+
+## The pipeline for obtaining and cleaning the dataset
+
+
+## Exploratory Analysis
+
+
+### Lyme Disease Changes from 1992-2011
+
+Although temperature And precipitation remained roughly the same, lyme disease had a steady increase from 1992-2011
+
+-- PUT DESCRIPTION HERE --
+
+__Averages cases__
+
+* 1992-96: 1186.78
+
+* 1997-01: 1611.50
+
+* 2002-06: 2158.64
+
+* 2007-11: 2658.22
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+LymeTempPrec<- read_csv("./LymeTempPrec3.csv")
+means<-LymeTempPrec %>%
+  summarise_at(vars(-state, -full), funs(mean(., na.rm=TRUE)))
+means<- means %>%
+  pivot_longer(everything(),names_to = "Measure", values_to = "Average")
+avgLyme <- means %>% filter(str_detect(Measure, "^lyme"))
+
+avgLyme$Measure <- as.factor(avgLyme$Measure)
+avgLyme$Measure <- factor(avgLyme$Measure, levels = c("lyme9296", "lyme9701", "lyme0206", "lyme0711"))
+ggplot(avgLyme, aes(x=Measure, y=Average)) +
+  geom_bar(stat = "identity") + ggtitle("Average Lyme Disease Cases for Each Period")
+```
+
+__Average temperature__
+
+* 1992-96: 62.90
+
+* 1997-01: 63.94
+
+* 2002-06: 63.82
+
+* 2007-11: 63.27
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+avgTemp <- means %>%
+  filter(str_detect(Measure, "^temp"))
+ggplot(data = avgTemp, aes(x=Measure, y=Average)) + geom_bar(stat = "identity") + ggtitle("Average Temperature for Each Period")
+```
+
+__Average precipitation__
+
+* 1992-96: 28.23
+
+* 1997-01: 26.37
+
+* 2002-06: 27.90
+
+* 2007-11: 28.70
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+avgPrec <- means %>%
+  filter(str_detect(Measure, "^prec"))
+ggplot(data = avgPrec, aes(x=Measure, y=Average)) + geom_bar(stat = "identity") + ggtitle("Average Precipitation for Each Period")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Temperature part: The change of average temperature in the U.S. and each states may affect the rate of Lymn disease.
+    1. Average Temperature of 50 states over 20 years
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Temp<-read.csv("AveTempState.csv")
+Temp2<-Temp %>%
+  group_by(State)%>%
+  summarise(Ave_Temp=mean(Ave_Temp))
+ggplot(Temp2,aes(y=State,weight=Ave_Temp)) + geom_bar() + 
+  labs(title = "Average Temperature of 50 states over 20 years",x="Temperature",y="State") + 
+  theme(plot.title = element_text(hjust = 0.5),axis.title.x = element_text(face = "bold"),axis.title.y = element_text(face = "bold"),axis.text.y = element_text())
+
+```
+
+    2. Average Temperature in the U.S.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Temp3<- Temp%>%
+  group_by(Year)%>%
+  summarise(Ave_Temp=mean(Ave_Temp))
+ggplot(Temp3,aes(x=Year,weight=Ave_Temp)) + geom_bar() +
+  labs(title = "Average Temperature over 20 years") + theme(plot.title = element_text(hjust = 0.5))
+```
+## Steps for data wrangling and visualization
+
+    Temperature part:
+    1. See how has the average temperature in the United States changed over 20 years.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(Temp3,aes(x=Year,y=Ave_Temp)) + geom_point(color="black") + stat_smooth(method = "lm", col = "red")+
+  labs(title = "Average Temperature changes over 20 years") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+    
+    2. See correlation between Temp and Lymn disease.
+
+
+
+## Graphs made for correlation of temperature, precipitation, and # of cases
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+LymeTempPrec<- read_csv("./LymeTempPrec3.csv")
+#head(LymeTempPrec)
+```
+
+
+Found averages
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+means<-LymeTempPrec %>%
+  summarise_at(vars(-state, -full), funs(mean(., na.rm=TRUE)))
+#head(means)
+```
+
+##Pivoted the data
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+means<- means %>%
+  pivot_longer(everything(),names_to = "Measure", values_to = "Average")
+#head(means)
+```
+##Plotted average Lyme
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+avgLyme <- means %>% filter(str_detect(Measure, "^lyme"))
+ggplot(data = avgLyme, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
+```
+##Plotted average Temperature
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+avgTemp <- means %>%
+  filter(str_detect(Measure, "^temp"))
+ggplot(data = avgTemp, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
+```
+##Plotted average Prec
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+avgPrec <- means %>%
+  filter(str_detect(Measure, "^prec"))
+ggplot(data = avgPrec, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
+```
+##Found sums
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+sums<-LymeTempPrec %>%
+  summarise_at(vars(-state, -full), funs(sum(., na.rm=TRUE)))
+sums<- sums %>%
+  pivot_longer(everything(),names_to = "Measure", values_to = "Total")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+sumLyme <- sums %>% filter(str_detect(Measure, "^lyme"))
+ggplot(data = sumLyme, aes(x=Measure, y=Total)) + geom_bar(stat = "identity")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+sumLyme$Measure <- as.factor(avgLyme$Measure)
+sumLyme$Measure <- factor(sumLyme$Measure, levels = c("lyme9296", "lyme9701", "lyme0206", "lyme0711"))
+ggplot(sumLyme, aes(x=Measure, y=Total, color = "darkblue")) +
+  geom_bar(stat = "identity")
+```
+
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+avgTemp$Measure <- as.factor(avgTemp$Measure)
+avgTemp$Measure <- factor(avgTemp$Measure, levels = c("temp9296", "temp9701", "temp0206", "temp0711"))
+ggplot(avgTemp, aes(x=Measure, y=Average)) +
+  geom_bar(stat = "identity")
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+avgPrec$Measure <- as.factor(avgPrec$Measure)
+avgPrec$Measure <- factor(avgPrec$Measure, levels = c("prec9296", "prec9701", "prec0206", "prec0711"))
+ggplot(avgPrec, aes(x=Measure, y=Average)) +
+  geom_bar(stat = "identity")
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+LymeTempPrec2<- LymeTempPrec %>%
+  select(full:temp0711)
+new <- LymeTempPrec2 %>%
+  pivot_longer(lyme9296:temp0711, names_to = "measure", values_to = "value")
+new$date<-substr(new$measure, nchar(new$measure) - 3, nchar(new$measure))
+new$measure <- substr(new$measure, 1, 4)
+head(new)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+new <- new %>%
+  pivot_wider(names_from = "measure", values_from = "value")
+head(new)
+```
+## Lyme disease typically happens around the 60 degrees range. cleaned for better format for the chart.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+new %>%
+  ggplot(aes(x=temp, y=lyme, color=date)) + geom_point()
+```
+## Scatterplot to show what temperatures the most cases occur at
+
+## Grahps for temperature and number of lyme dieases cases
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(readxl)
+
+honk <-read.csv("LymeTempPrec.csv")
+
+d9296 <- ggplot(aes(x = temp9296, y = lyme9296
+           ), data=honk) + geom_point() + ggtitle('temp vs lyme disease correlation 1992-1996') + xlab('temperature') + ylab('lyme disease cases')
+d9296
+
+d9701 <- ggplot(aes(x = temp9701, y = lyme9701
+           ), data=honk) + geom_point() + ggtitle('temp vs lyme disease correlation 1997-2001') + xlab('temperature') + ylab('lyme disease cases')
+d9701
+
+d0206 <- ggplot(aes(x = temp0206, y = lyme0206
+           ), data=honk) + geom_point() +  ggtitle('temp vs lyme disease correlation 2002-2006')  + xlab('temperature') + ylab('lyme disease cases')
+d0206
+
+
+d0711 <- ggplot(aes(x = temp0711, y = lyme0711
+           ), data=honk) + geom_point() +  ggtitle('temp vs lyme disease correlation 2007-2011')  + xlab('temperature') + ylab('lyme disease cases')
+d0711
+
+
+Temp<-read.csv("LymeTempPrec.csv")
+Temp %>%
+  group_by(state) %>%
+  ggplot(aes(x=temp9701,y=lyme9701),fill=state) + geom_point() + facet_wrap(~state) +
+  labs(title = "temp vs lyme")
+
+
+ggplot(honk, aes(x = state, weight = temp9701)) + geom_bar() + coord_flip() + ylab('Temp')
+
+```
+
+#We found that between 55-65 farenheit are where most of the lyme disease cases start to peak. We modeled lyme disease cases verus temperature throughout the yers 1992-2011. The pattern was consistent through the years the the avg temperaute of 60 f was very dangerous due to the amount of high cases of lyme disease.
+
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+#---Get And Clean Data---
+
+  #---Lyme Disease First Data Set---
+    LDFfile <- "./Data sets/LymeDisease_9211_county (1).csv"
+    LDdata <- read.csv(LDFfile)
+    LDdata[is.na(LDdata)] <- 0
+    LDdata$StateCode <- as.numeric(LDdata$StateCode)
+    LDdata$CountyCode <- as.numeric(LDdata$CountyCode)
+    LDdata$StateName <- tolower(LDdata$StateName)
+    LDdata$CountyName <- tolower(LDdata$CountyName)
+    LDdata$CountyName <- str_remove(LDdata$CountyName, " county")
+    
+    LDdataStates <- LDdata %>% group_by(StateName) %>% summarise(
+      ConfirmedCount_1992_1996 = sum(ConfirmedCount_1992_1996),
+      ConfirmedCount_1997_2001 = sum(ConfirmedCount_1997_2001),
+      ConfirmedCount_2002_2006 = sum(ConfirmedCount_2002_2006),
+      ConfirmedCount_2007_2011 = sum(ConfirmedCount_2007_2011))
+    
+#---Get State Data For Maps
+  states <- map_data("state")
+  county <- map_data("county")
+```
+
+## Map Data For Lyme Disease Data Set
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+#---Map Data For Lyme Disease Data Set---
+  LDdataM <- left_join(LDdataStates, states, by=c("StateName" = "region"))
+  
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1992_1996)) + geom_polygon(color = "grey") + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1997_2001)) + geom_polygon(color = "grey") + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2002_2006)) + geom_polygon(color = "grey") + coord_map()
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2007_2011)) + geom_polygon(color = "grey") + coord_map()
+
+```
+
+## Graph Data For Lyme Disease Data Set
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#---Graph Data For Lyme Disease First Data Set---
+  LDdataG <- LDdataStates
+  LDdataG <- LDdataG %>% pivot_longer(names_to = "ConfirmedCount", values_to = "Count", cols = c(
+    ConfirmedCount_1992_1996, 
+    ConfirmedCount_1997_2001, 
+    ConfirmedCount_2002_2006, 
+    ConfirmedCount_2007_2011))
+  
+  #---Confirmed Count TOtal For Each State---
+  
+    #---1992 to 1996---
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1992_1996") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1992-1996") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
+    
+    #---1997 to 2001---
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1997_2001") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1997-2001") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
+    
+    #---2002 to 2006---
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2002_2006") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2002-2006") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
+    
+    #---2007 to 2011---
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2007_2011") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2007-2011") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
+```
+
+
+
+* Which states have the highest rate of Lyme Disease?
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#stack bar for region
+region <- read.csv("cumLymeReport_2007_2011_byRegion.csv")
+region <- region %>%
+  mutate(area=ï..Areas) %>%
+  select(!ï..Areas)
+
+regionpiv <- region %>%
+  pivot_longer(!area, names_to="cumu", values_to="value")
+#str(regionpiv)
+
+regionpiv %>%
+  ggplot(aes(fill=cumu, y=value, x=reorder(area, value))) + 
+    geom_bar(position="stack", stat="identity") + coord_flip() + labs(title="52-week Cumulative of Lyme Disease cases by US Region", y="Total cases", x="Region") + scale_fill_discrete(name = "Cumulative cases per year", labels = c("2007", "2008", "2009", "2010", "2011"))
+
+#for state
+USA_states <- map_data("state")
+sName <- USA_states %>%
+  mutate(region=str_to_title(USA_states$region))
+
+temp2 <- read.csv("LymeTempPrec2.csv")
+ltp <- temp2 %>%
+  mutate(region=full) %>%
+  select(!c('full'))
+
+ltp2 <- ltp %>%
+  filter(lyme0711>1000)
+
+ltpmap <- ltp %>% left_join(sName, by="region")
+ltp2map <- ltp2 %>% left_join(sName, by="region")
+sText <- ltp2map %>% group_by(region, state) %>% summarise(long=mean(long), lat=mean(lat))
+  
+ggplot() + geom_path(data=ltpmap,
+                        aes(x=long, y=lat, group=group)) +
+  geom_polygon(data=ltp2map,
+                aes(x=long, y=lat, group=group, fill=lyme0711)) +
+  scale_fill_continuous(low='tomato', high='darkred', guide='colorbar') +
+  coord_map() +
+  geom_text(data=sText, 
+            aes(x=long, y=lat, label=state), color='black') +
+  labs(title="US States With > 1000 Cases", fill="Total Cases")
+
+#for county
+
+USA_counties <- map_data("county")
+cName <- USA_counties %>%
+  mutate(subregion=str_to_title(subregion))
+
+count1 <- read.csv("Data Sets/LymeDisease_9211_county (1).csv")
+countClean <- count1 %>% 
+  separate(CountyName, c("subregion", "county")) %>%
+  filter(!CountyCode==0) %>%
+  mutate(county=str_replace(county, "County", "")) %>%
+  unite('subregion',subregion:county,sep=" ") %>%
+  mutate(subregion=trimws(gsub("\\s+", " ", subregion))) %>%
+  mutate(c711=replace_na(ConfirmedCount_2007_2011, 0))
+
+countCleanSum <- countClean %>%
+  group_by(subregion) %>%
+  summarise(c711=sum(c711)) %>%
+  arrange(desc(c711))
+
+countCleanMap <- countCleanSum %>% 
+  left_join(cName, by='subregion') %>% 
+  filter(c711>100)
+
+countCleanMap <- countCleanMap %>%
+  filter(region %in% c('minnesota', 'wisconsin', 'virginia', 'maryland', 'pennsylvania', 'new jersey', 'new york', 'connecticut', 'massachusetts', 'maine', 'vermont', 'new hampshire', 'delaware'))
+
+ggplot() + geom_path(data=ltp2map,
+                        aes(x=long, y=lat, group=group)) +
+  geom_polygon(data=countCleanMap,
+                aes(x=long, y=lat, group=group, fill=c711), color='black') +
+  scale_fill_continuous(low='tomato', high='darkred', guide='colorbar') +
+  coord_map() +
+  labs(title="US Counties With > 100 Cases In The Northeast Central Region", fill="Total cases")
+
+
+```
+
+  
+* Does the Lyme Disease rate in the states influenced by the weather?
+
+```{r message=FALSE, warning=FALSE}
+ltp %>%
+  left_join(sName, by="region") %>%
+  ggplot(aes(x=long, y=lat, fill=temp0711)) + geom_polygon(aes(group=group)) + coord_map() + 
+  scale_fill_continuous(low='tan1', high='darkred', guide='colorbar') +
+  labs(title="Temperature Levels in US", fill="Temp (F)")
+
+ltp %>%
+  left_join(sName, by="region") %>%
+  ggplot(aes(x=long, y=lat, fill=prec0711)) + geom_polygon(aes(group=group)) + coord_map() +
+  scale_fill_continuous(low='lightcyan2', high='blue', guide='colorbar') +
+  labs(title="Precipitation Levels in US", fill="Prec (inch)")
+```  
+
+## Answers to the questions raised
+We found that areas with lower temperatures and higher levels of precipitation were where most of the cases occurred. 
+Around 60 degrees farenheit was the peak temperature throughout every year. 
+States matching this description were mostly in the northeast.
+
+
+## Conclusion
