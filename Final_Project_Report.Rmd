@@ -73,23 +73,14 @@ __According to the CDC:__
   * Data is initially in the form of pdf files separated in each year in a 52 week format
 
   * Data is scraped from pdf files in each year into a csv format
-
-
-  Background description:
-  Question list:1. Has Lyme disease increased from 1992?(Overall and states)
-                2. Which states have the highest rate of Lyme Disease?
-                3. What changes have happened to the average temperature（Overall and states)?
-                4. Is there any association with the rate of Lyme disease and the changes to temperature?
-                5. What changes have happened to the average temperature?
-                6. Is there any association with the rate of Lyme disease and the changes to precipitation?
                     
 ***
 
 ## The pipeline for obtaining and cleaning the dataset
 
-### cleaning of the stations txt file
+#### cleaning of the stations txt file
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 stations <- read.delim("ghcnd-stations.txt", header = FALSE, quote = "", row.names = NULL, 
                  stringsAsFactors = FALSE)
 df <- data.frame(stations)
@@ -104,13 +95,13 @@ head(confilt)
 
 ```
 
-### Cleaning of prec data
+#### Cleaning of prec data
 
-### Adding the text file to the dataframe
+#### Adding the text file to the dataframe
 
-### Merging csv files and grouping by the state by the info in txt file
+#### Merging csv files and grouping by the state by the info in txt file
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 
 T1992 <- read.csv("mP1992.csv")
@@ -169,15 +160,15 @@ finalWStatePrec <- finalWStatePrec %>% group_by(state) %>% summarise(across(prec
 head(finalWStatePrec)
 ```
 
-### Cleaning of temp data
+#### Cleaning of temp data
 
-### Adding the text file to the dataframe
+#### Adding the text file to the dataframe
 
-### Merging csv files and grouping by the state by the info in txt file
+#### Merging csv files and grouping by the state by the info in txt file
 
-### Changing the temp data from 10th of a degree celcius to feriegnhight
+#### Changing the temp data from 10th of a degree celcius to feriegnhight
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 T1992 <- read.csv("mT1992.csv")
 T1993 <- read.csv("mT1993.csv")
 T1994 <- read.csv("mT1994.csv")
@@ -255,11 +246,11 @@ head(finalWStateTemp)
                                        
 ```
 
-### Combining temp, lyme and prec
+#### Combining temp, lyme and prec
 
-### Seperating the years in prec dataframe
+#### Seperating the years in prec dataframe
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 lyme <- read.csv("LymeDisease_9211_county.csv")
 abb <- read.csv("stateWabbrev.csv")
 
@@ -277,9 +268,9 @@ prec2 <- cbind(prec1, prec9296, prec9701, prec0206, prec0711)
 head(prec2)
 ```
 
-### Seperating the years in the temp data frame
+#### Seperating the years in the temp data frame
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 temp <- finalWStateTemp
 temp1 <- temp %>% select(1)
 temp9296 <- temp %>% select(2:6)
@@ -294,9 +285,9 @@ temp2 <- cbind(temp1, temp9296, temp9701, temp0206, temp0711)
 head(temp2)
 ```
 
-### Cleaning the lyme disease data frame
+#### Cleaning the lyme disease data frame
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 lyme3 <- lyme %>% select(3)
 lyme5 <- lyme %>% select(5:8)
 comblyme <- cbind(lyme3,lyme5)
@@ -333,9 +324,9 @@ comb <- merge(comb, aglyme4,by=c("state"))
 head(comb)
 ```
 
-### Adding state abbr to lyme disease
+#### Adding state abbr to lyme disease
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 #abb
 newLyme <- comb %>% dplyr::rename(full = state)
 head(newLyme)
@@ -347,9 +338,9 @@ newLyme <- merge(newLyme, abb,by=c("full"))
 head(newLyme)
 ```
 
-### Combining 3 data sets
+#### Combining 3 data sets
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 LymeTemp <- merge(newLyme, temp2,by=c("state"))
 LymeTempPrec <- merge(LymeTemp, prec2,by=c("state"))
 head(LymeTempPrec)
@@ -665,7 +656,7 @@ ggplot() + geom_path(data=ltp2map,
 
 ## Temperature Difference in US between 2007-2011
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 ltp %>%
   left_join(sName, by="region") %>%
   ggplot(aes(x=long, y=lat, fill=temp0711)) + geom_polygon(aes(group=group)) + coord_map() + 
