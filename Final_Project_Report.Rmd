@@ -802,6 +802,8 @@ ltp %>%
 
 ### Average Precipitation
 
+The average precipitation does not change very much from each year but there are several peaks in certain years such as 1996 and 2011.
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 
 prec3 <- pivot_longer(prec, cols = starts_with("prec"), names_to = "years", values_to = "precipitation")
