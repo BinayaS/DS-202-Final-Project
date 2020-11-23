@@ -853,37 +853,37 @@ ggscatter(all, x = "allprec", y = "allLyme", add = "reg.line", conf.int = TRUE, 
 
 ## Answers to the questions raised
 
-* Has Lyme disease increased from 1992?(Overall and states)
+* __Has Lyme disease increased from 1992?(Overall and states)__
 
   * The number of lime disease overall has increased by an average of 500 cases every 5 years
-  
+
   * The number of lime disease cases for the states has steadily increased throughout the years but there are years in which certain states will have a decrease in cases.
+
   
-  
-* Which states have the highest rate of Lyme Disease?
-  
+* __Which states have the highest rate of Lyme Disease?__
+
   * New York and Pennsylvania have the highest cases during from 1992 to 2011
+
   
-  
-* What changes have happened to the average temperature?
+* __What changes have happened to the average temperature?__
 
   * It stayed very close to each other, in the range of 61-63 degree fahrenheit. It did not change much with an overall average of about 63.5.
-  
-  
-* Is there any association with the rate of Lyme disease and the changes to temperature?
-  
-  * Around 60 degrees fahrenheit was the peak temperature throughout every year. That 55-65 degrees was the most dangerous for the high amount of cases of lyme diseases.
-  
-  
-* What changes have happened to the average precipitation?
 
-  * 
-    
-    
-* Is there any association with the rate of Lyme disease and the changes to precipitation?
+  
+* __Is there any association with the rate of Lyme disease and the changes to temperature?__
+
+  * Around 60 degrees fahrenheit was the peak temperature throughout every year. That 55-65 degrees was the most dangerous for the high amount of cases of lyme diseases.
+
+  
+* __What changes have happened to the average precipitation?__
+
+  * The average precipitation has stayed mostly stable.
+  
+
+* __Is there any association with the rate of Lyme disease and the changes to precipitation?__
 
   * we found that areas with lower temperatures and higher levels of precipitation were where most of the cases occurred. 
-  
+
   * States matching this description were mostly in the northeast.
 
 ## Conclusion
