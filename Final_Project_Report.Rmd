@@ -84,8 +84,12 @@ __According to the CDC:__
 ## The pipeline for obtaining and cleaning the dataset
 
 
-## Exploratory Analysis
 
+
+
+
+
+## Exploratory Analysis
 
 ### Lyme Disease Changes from 1992-2011
 
@@ -149,6 +153,140 @@ avgPrec <- means %>%
   filter(str_detect(Measure, "^prec"))
 ggplot(data = avgPrec, aes(x=Measure, y=Average)) + geom_bar(stat = "identity") + ggtitle("Average Precipitation for Each Period")
 ```
+
+__Total number of cases__
+
+* 1992-96: 59,339
+
+* 1997-01: 80,575
+
+* 2002-06: 107,932
+
+* 2007-11: 132,911
+
+* Total = 380,757
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+sums<-LymeTempPrec %>%
+  summarise_at(vars(-state, -full), funs(sum(., na.rm=TRUE)))
+sums<- sums %>%
+  pivot_longer(everything(),names_to = "Measure", values_to = "Total")
+
+sumLyme <- sums %>% filter(str_detect(Measure, "^lyme"))
+sumLyme$Measure <- as.factor(avgLyme$Measure)
+sumLyme$Measure <- factor(sumLyme$Measure, levels = c("lyme9296", "lyme9701", "lyme0206", "lyme0711"))
+ggplot(sumLyme, aes(x=Measure, y=Total)) +
+  geom_bar(stat = "identity") + ggtitle("Total Number of Cases for Each Year")
+```
+
+
+
+
+### Lyme Disease Affected States
+
+Here we can look at which states were most affected by Lyme disease.
+
+From the maps below we can start to see that the upper right region of the US has a high amount of cases
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+#---Get And Clean Data---
+
+  #---Lyme Disease First Data Set---
+    LDFfile <- "./Data sets/LymeDisease_9211_county (1).csv"
+    LDdata <- read.csv(LDFfile)
+    LDdata[is.na(LDdata)] <- 0
+    LDdata$StateCode <- as.numeric(LDdata$StateCode)
+    LDdata$CountyCode <- as.numeric(LDdata$CountyCode)
+    LDdata$StateName <- tolower(LDdata$StateName)
+    LDdata$CountyName <- tolower(LDdata$CountyName)
+    LDdata$CountyName <- str_remove(LDdata$CountyName, " county")
+    
+    LDdataStates <- LDdata %>% group_by(StateName) %>% summarise(
+      ConfirmedCount_1992_1996 = sum(ConfirmedCount_1992_1996),
+      ConfirmedCount_1997_2001 = sum(ConfirmedCount_1997_2001),
+      ConfirmedCount_2002_2006 = sum(ConfirmedCount_2002_2006),
+      ConfirmedCount_2007_2011 = sum(ConfirmedCount_2007_2011))
+    
+#---Get State Data For Maps
+  states <- map_data("state")
+  county <- map_data("county")
+
+#---Graph Data For Lyme Disease First Data Set---
+LDdataG <- LDdataStates
+LDdataG <- LDdataG %>% pivot_longer(names_to = "ConfirmedCount", values_to = "Count", cols = c(
+  ConfirmedCount_1992_1996, 
+  ConfirmedCount_1997_2001, 
+  ConfirmedCount_2002_2006, 
+  ConfirmedCount_2007_2011))
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+#---Map Data For Lyme Disease Data Set---
+  LDdataM <- left_join(LDdataStates, states, by=c("StateName" = "region"))
+  
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1992_1996)) + geom_polygon(color = "grey") + coord_map() + ggtitle("Map of Lyme Disiease from 1992 to 1996")
+  
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1997_2001)) + geom_polygon(color = "grey") + coord_map() + ggtitle("Map of Lyme Disiease from 1997 to 2001")
+  
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2002_2006)) + geom_polygon(color = "grey") + coord_map() + ggtitle("Map of Lyme Disiease from 2002 to 2006")
+  
+  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2007_2011)) + geom_polygon(color = "grey") + coord_map() + ggtitle("Map of Lyme Disiease from 2007 to 2011")
+
+```
+
+
+__Cases from 1992-1996__
+
+* New York had the most amount of lyme disease cases with 21,205 cases.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#---1992 to 1996---
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1992_1996") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1992-1996") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
+```
+
+
+__Cases from 1997-2001__
+
+* New York had the most amount of lyme disease cases and ended up with slightly few cases at 20,781.
+
+* Connecticut saw a massive rise in cases from 9,792 to 16,316 cases.
+
+* Pennsylvania and New Jersey also saw a significant rise in cases.
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#---1997 to 2001---
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1997_2001") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1997-2001") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
+```
+
+
+__Cases from 2002-2006__
+
+* New York had the most amount of lyme disease cases with 26,059 cases.
+
+* Generally most states saw an increase in lyme disease cases or stated the same with the exception of Connecticut which decreased from 16,316 to 10,980.
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#---2002 to 2006---
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2002_2006") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2002-2006") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
+```
+
+
+__Cases from 2007-2011__
+
+* Pennsylvania had the most amount of lyme disease cases with 20,799 cases.
+
+* More states with higher counts lyme disease cases
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#---2007 to 2011---
+    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2007_2011") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2007-2011") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
+```
+
+
+
 
 
 
@@ -362,69 +500,6 @@ ggplot(honk, aes(x = state, weight = temp9701)) + geom_bar() + coord_flip() + yl
 
 ```
 
-
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-#---Get And Clean Data---
-
-  #---Lyme Disease First Data Set---
-    LDFfile <- "./Data sets/LymeDisease_9211_county (1).csv"
-    LDdata <- read.csv(LDFfile)
-    LDdata[is.na(LDdata)] <- 0
-    LDdata$StateCode <- as.numeric(LDdata$StateCode)
-    LDdata$CountyCode <- as.numeric(LDdata$CountyCode)
-    LDdata$StateName <- tolower(LDdata$StateName)
-    LDdata$CountyName <- tolower(LDdata$CountyName)
-    LDdata$CountyName <- str_remove(LDdata$CountyName, " county")
-    
-    LDdataStates <- LDdata %>% group_by(StateName) %>% summarise(
-      ConfirmedCount_1992_1996 = sum(ConfirmedCount_1992_1996),
-      ConfirmedCount_1997_2001 = sum(ConfirmedCount_1997_2001),
-      ConfirmedCount_2002_2006 = sum(ConfirmedCount_2002_2006),
-      ConfirmedCount_2007_2011 = sum(ConfirmedCount_2007_2011))
-    
-#---Get State Data For Maps
-  states <- map_data("state")
-  county <- map_data("county")
-```
-
-## Map Data For Lyme Disease Data Set
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-#---Map Data For Lyme Disease Data Set---
-  LDdataM <- left_join(LDdataStates, states, by=c("StateName" = "region"))
-  
-  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1992_1996)) + geom_polygon(color = "grey") + coord_map()
-  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_1997_2001)) + geom_polygon(color = "grey") + coord_map()
-  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2002_2006)) + geom_polygon(color = "grey") + coord_map()
-  LDdataM %>% ggplot(aes(x = long, y = lat, group=group, fill = ConfirmedCount_2007_2011)) + geom_polygon(color = "grey") + coord_map()
-
-```
-
-## Graph Data For Lyme Disease Data Set
-
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-#---Graph Data For Lyme Disease First Data Set---
-  LDdataG <- LDdataStates
-  LDdataG <- LDdataG %>% pivot_longer(names_to = "ConfirmedCount", values_to = "Count", cols = c(
-    ConfirmedCount_1992_1996, 
-    ConfirmedCount_1997_2001, 
-    ConfirmedCount_2002_2006, 
-    ConfirmedCount_2007_2011))
-  
-  #---Confirmed Count TOtal For Each State---
-  
-    #---1992 to 1996---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1992_1996") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1992-1996") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
-    
-    #---1997 to 2001---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_1997_2001") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 1997-2001") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
-    
-    #---2002 to 2006---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2002_2006") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2002-2006") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
-    
-    #---2007 to 2011---
-    LDdataG %>% filter(ConfirmedCount == "ConfirmedCount_2007_2011") %>% ggplot(aes(x = StateName, y = Count)) + geom_bar(position = 'dodge', stat='identity') + theme(axis.text.x=element_text(angle = -90, vjust = 0.5)) + ggtitle("Confirmed Cases from 2007-2011") + geom_text(aes(label=Count), position=position_dodge(width=0.9), vjust=-0.25, size = 2)
-```
 
 
 
