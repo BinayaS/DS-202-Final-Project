@@ -16,6 +16,7 @@ library(scales)
 library(reshape)
 library(RColorBrewer)
 library(stringr)
+library(ggpubr)
 setwd(getwd())
 ```
 
@@ -86,10 +87,9 @@ __According to the CDC:__
 
 ## The pipeline for obtaining and cleaning the dataset
 
-***
-##cleaning of the stations txt file
+### cleaning of the stations txt file
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 stations <- read.delim("ghcnd-stations.txt", header = FALSE, quote = "", row.names = NULL, 
                  stringsAsFactors = FALSE)
 df <- data.frame(stations)
@@ -104,11 +104,13 @@ head(confilt)
 
 ```
 
-##cleaning of prec data
-##adding the text file to the dataframe
-##Merging csv files and grouping by the state by the info in txt file
+### Cleaning of prec data
 
-```{r}
+### Adding the text file to the dataframe
+
+### Merging csv files and grouping by the state by the info in txt file
+
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 
 T1992 <- read.csv("mP1992.csv")
@@ -167,12 +169,15 @@ finalWStatePrec <- finalWStatePrec %>% group_by(state) %>% summarise(across(prec
 head(finalWStatePrec)
 ```
 
-##cleaning of temp data
-##adding the text file to the dataframe
-##Merging csv files and grouping by the state by the info in txt file
-##Changing the temp data from 10th of a degree celcius to feriegnhight
+### Cleaning of temp data
 
-```{r}
+### Adding the text file to the dataframe
+
+### Merging csv files and grouping by the state by the info in txt file
+
+### Changing the temp data from 10th of a degree celcius to feriegnhight
+
+```{r message=FALSE, warning=FALSE}
 T1992 <- read.csv("mT1992.csv")
 T1993 <- read.csv("mT1993.csv")
 T1994 <- read.csv("mT1994.csv")
@@ -250,10 +255,11 @@ head(finalWStateTemp)
                                        
 ```
 
-##Combining temp, lyme and prec
-##seperating the years in prec dataframe
+### Combining temp, lyme and prec
 
-```{r}
+### Seperating the years in prec dataframe
+
+```{r message=FALSE, warning=FALSE}
 lyme <- read.csv("LymeDisease_9211_county.csv")
 abb <- read.csv("stateWabbrev.csv")
 
@@ -271,10 +277,9 @@ prec2 <- cbind(prec1, prec9296, prec9701, prec0206, prec0711)
 head(prec2)
 ```
 
-##temp
-##seperating the years in the temp data frame
+### Seperating the years in the temp data frame
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 temp <- finalWStateTemp
 temp1 <- temp %>% select(1)
 temp9296 <- temp %>% select(2:6)
@@ -289,9 +294,9 @@ temp2 <- cbind(temp1, temp9296, temp9701, temp0206, temp0711)
 head(temp2)
 ```
 
-#cleaning the lyme disease data frame
+### Cleaning the lyme disease data frame
 
-```{r, warning=FALSE, message=FALSE}
+```{r message=FALSE, warning=FALSE}
 lyme3 <- lyme %>% select(3)
 lyme5 <- lyme %>% select(5:8)
 comblyme <- cbind(lyme3,lyme5)
@@ -328,8 +333,9 @@ comb <- merge(comb, aglyme4,by=c("state"))
 head(comb)
 ```
 
-##adding state abbr to lyme disease
-```{r}
+### Adding state abbr to lyme disease
+
+```{r message=FALSE, warning=FALSE}
 #abb
 newLyme <- comb %>% dplyr::rename(full = state)
 head(newLyme)
@@ -341,9 +347,9 @@ newLyme <- merge(newLyme, abb,by=c("full"))
 head(newLyme)
 ```
 
-##Combining 3 data sets
+### Combining 3 data sets
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 LymeTemp <- merge(newLyme, temp2,by=c("state"))
 LymeTempPrec <- merge(LymeTemp, prec2,by=c("state"))
 head(LymeTempPrec)
@@ -657,6 +663,18 @@ ggplot() + geom_path(data=ltp2map,
 
 ***
 
+## Temperature Difference in US between 2007-2011
+
+```{r message=FALSE, warning=FALSE}
+ltp %>%
+  left_join(sName, by="region") %>%
+  ggplot(aes(x=long, y=lat, fill=temp0711)) + geom_polygon(aes(group=group)) + coord_map() + 
+  scale_fill_continuous(low='tan1', high='darkred', guide='colorbar') +
+  labs(title="Temperature Levels in US", fill="Temp (F)")
+```  
+
+***
+
 ### The change of average temperature in the U.S. and each states may affect the rate of Lymn disease.
 
 The average temperature for each state varies by a lot.
@@ -737,7 +755,7 @@ d0711
 
 ***
 
-### Peak temperatures for lyme disease
+### Scatterplot to show Peak temperatures for lyme disease cases
 
 We can see that when the above graphs are combined together that Lyme disease typically happens when the temperature is around the range of 60 degrees.
 
@@ -763,67 +781,53 @@ We found that between 55-65 fahrenheit are where most of the lyme disease cases 
 
 ***
 
+### Precipitation Difference in US between 2007-2011
 
+* Precipitation in the Northeast are higher than the others
 
+* Indicates that the disease is carried by ticks that favor higher precipitation
 
+* Also means good humidity
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Scatterplot to show what temperatures the most cases occur at
-
-## Answers to the questions raised
-
-## Conclusion
-
-## Grahps for temperature and number of lyme dieases cases
-  
-* Does the Lyme Disease rate in the states influenced by the weather?
-
-```{r message=FALSE, warning=FALSE}
-ltp %>%
-  left_join(sName, by="region") %>%
-  ggplot(aes(x=long, y=lat, fill=temp0711)) + geom_polygon(aes(group=group)) + coord_map() + 
-  scale_fill_continuous(low='tan1', high='darkred', guide='colorbar') +
-  labs(title="Temperature Levels in US", fill="Temp (F)")
-
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 ltp %>%
   left_join(sName, by="region") %>%
   ggplot(aes(x=long, y=lat, fill=prec0711)) + geom_polygon(aes(group=group)) + coord_map() +
   scale_fill_continuous(low='lightcyan2', high='blue', guide='colorbar') +
   labs(title="Precipitation Levels in US", fill="Prec (inch)")
-```  
-
-##Correlation between Lyme disease and precipitation
-##The p- value is very large so the correlation is not significant
-
-```{r}
-library("ggpubr")
 ```
 
-#Graphs
-```{r}
+
+***
+
+### Average Precipitation
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+prec3 <- pivot_longer(prec, cols = starts_with("prec"), names_to = "years", values_to = "precipitation")
+
+precptationAvg <- prec3 %>% group_by(years) %>% summarise(precipitation = mean(precipitation))
+
+precptationAvg$years <- str_remove(precptationAvg$years, "prec")
+
+ggplot(data = precptationAvg, aes(x = years, weight = precipitation)) + geom_bar(color = "black", fill = "grey") + theme(axis.text.x=element_text(angle = -45, vjust = 0.5)) + ylab("Avg. Prec. per state (tenths of mm)")
+
+```
+
+
+***
+
+### Correlation between Lyme disease and precipitation
+
+The p- value is very large so the correlation is not significant
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 lyme <- LymeTempPrec
-head(lyme)
+#head(lyme)
 prec1 <- finalWStatePrec
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 justLyme <- lyme %>% select(3, 6)
 allLyme <- rowMeans(justLyme)
 
@@ -834,8 +838,8 @@ justprec <- lyme %>% select(11, 14)
 allprec <- rowMeans(justprec)
 
 all <- data.frame(cbind(allLyme, alltemp, allprec))
-head(all)
-#
+#head(all)
+
 
 ggscatter(all, x = "allprec", y = "allLyme", add = "reg.line", conf.int = TRUE, cor.coef = TRUE, cor.method = "pearson",xlab = "Avg Precipitation 92 to 11", ylab = "avg lyme Disease 92 to 11", main="Correlation Between Precipitation and Lyme Disease 1992 to 2011")
 
@@ -843,26 +847,41 @@ ggscatter(all, x = "allprec", y = "allLyme", add = "reg.line", conf.int = TRUE, 
 
 ```
 
+***
 
 ## Answers to the questions raised
 
-  1. Has Lyme disease increased from 1992?(Overall and states)
-  
-  2. Which states have the highest rate of Lyme Disease?
-  
-  3. What changes have happened to the average temperature（Overall and states)?
-  
-  4. Is there any association with the rate of Lyme disease and the changes to temperature?
-  Around 60 degrees fahrenheit was the peak temperature throughout every year. That 55-65 degrees was the most        dangerous for the high amount of cases of lyme diseases.
-  
-  5. What changes have happened to the average temperature?
-  It stayed very close to eachother, in the range of 61-63 degree fahrenheit. It did not change much with an         overall average of about 63.5.
-               
-  6. Is there any association with the rate of Lyme disease and the changes to precipitation?
-  we found that areas with lower temperatures and higher levels of precipitation were where most of the cases        occurred. 
-  
-  
-  States matching this description were mostly in the northeast.
+* Has Lyme disease increased from 1992?(Overall and states)
 
+  * The number of lime disease overall has increased by an average of 500 cases every 5 years
+  
+  * The number of lime disease cases for the states has steadily increased throughout the years but there are years in which certain states will have a decrease in cases.
+  
+  
+* Which states have the highest rate of Lyme Disease?
+  
+  * New York and Pennsylvania have the highest cases during from 1992 to 2011
+  
+  
+* What changes have happened to the average temperature?
+
+  * It stayed very close to each other, in the range of 61-63 degree fahrenheit. It did not change much with an overall average of about 63.5.
+  
+  
+* Is there any association with the rate of Lyme disease and the changes to temperature?
+  
+  * Around 60 degrees fahrenheit was the peak temperature throughout every year. That 55-65 degrees was the most dangerous for the high amount of cases of lyme diseases.
+  
+  
+* What changes have happened to the average precipitation?
+
+  * 
+    
+    
+* Is there any association with the rate of Lyme disease and the changes to precipitation?
+
+  * we found that areas with lower temperatures and higher levels of precipitation were where most of the cases occurred. 
+  
+  * States matching this description were mostly in the northeast.
 
 ## Conclusion
