@@ -81,13 +81,6 @@ __According to the CDC:__
                 6. Is there any association with the rate of Lyme disease and the changes to precipitation?
                     
 
-## The pipeline for obtaining and cleaning the dataset
-
-
-
-
-
-
 
 ## Exploratory Analysis
 
@@ -148,6 +141,7 @@ __Average precipitation__
 * 2007-11: 28.70
 
 ##Plotted average Prec
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgPrec <- means %>%
   filter(str_detect(Measure, "^prec"))
@@ -364,12 +358,11 @@ LymeTempPrec<- read_csv("LymeTempPrec3.csv")
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 LymeTempPrec<- read_csv("./LymeTempPrec3.csv")
-<<<<<<< HEAD
+
 
 head(LymeTempPrec)
-=======
-#head(LymeTempPrec)
->>>>>>> dec8f92507c9eaa5fdd8cb5090a794c482f665e1
+
+
 ```
 
 
@@ -384,18 +377,16 @@ means<-LymeTempPrec %>%
 #head(means)
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     Pivoted the data
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyr)
 ```
 
-##Pivoted the data
-=======
+
+
 ##Pivoted the data to make it easier to work with
->>>>>>> dec8f92507c9eaa5fdd8cb5090a794c482f665e1
+
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 
@@ -403,7 +394,7 @@ means<- means %>%
   pivot_longer(everything(),names_to = "Measure", values_to = "Average")
 #head(means)
 ```
-<<<<<<< HEAD
+
 
     
     Plotted average Lyme
@@ -415,37 +406,33 @@ ggplot(data = avgLyme, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
 
 
-##Plotted average Lyme
-=======
 ##Plotted average Lyme nationwide for each 5 year block.
 ##Steady increase of about 500 more new cases each 5 years
->>>>>>> dec8f92507c9eaa5fdd8cb5090a794c482f665e1
+
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgLyme <- means %>% filter(str_detect(Measure, "^lyme"))
 ggplot(data = avgLyme, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
-<<<<<<< HEAD
 
-##Plotted average Temperature
-=======
+
+
 ##Plotted average Temperature nationwide for each 5 year block.
 ##Remained roughly the same
->>>>>>> dec8f92507c9eaa5fdd8cb5090a794c482f665e1
+
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgTemp <- means %>%
   filter(str_detect(Measure, "^temp"))
 ggplot(data = avgTemp, aes(x=Measure, y=Average)) + geom_bar(stat = "identity")
 ```
-<<<<<<< HEAD
 
 
-##Plotted average Prec
-=======
+
+
 ##Plotted average Prec nationwide for each 5 year block.
 ##Remained roughly the same
->>>>>>> dec8f92507c9eaa5fdd8cb5090a794c482f665e1
+
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgPrec <- means %>%
@@ -471,11 +458,11 @@ ggplot(data = sumLyme, aes(x=Measure, y=Total)) + geom_bar(stat = "identity")
 ```
 
 
-<<<<<<< HEAD
 
-=======
+
+
 ##Reordered the graphs to be in chronological order making it easier to read and understand the information.
->>>>>>> dec8f92507c9eaa5fdd8cb5090a794c482f665e1
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 sumLyme$Measure <- as.factor(avgLyme$Measure)
 sumLyme$Measure <- factor(sumLyme$Measure, levels = c("lyme9296", "lyme9701", "lyme0206", "lyme0711"))
@@ -484,7 +471,7 @@ ggplot(sumLyme, aes(x=Measure, y=Total, color = "darkblue")) +
 ```
 
 
-<<<<<<< HEAD
+
 
 
 
@@ -497,9 +484,9 @@ avgLyme$Measure <- factor(avgLyme$Measure, levels = c("lyme9296", "lyme9701", "l
 ggplot(avgLyme, aes(x=Measure, y=Average)) +
   geom_bar(stat = "identity")
 ```
-=======
+
 ##Reordered
->>>>>>> dec8f92507c9eaa5fdd8cb5090a794c482f665e1
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgTemp$Measure <- as.factor(avgTemp$Measure)
 avgTemp$Measure <- factor(avgTemp$Measure, levels = c("temp9296", "temp9701", "temp0206", "temp0711"))
@@ -537,7 +524,7 @@ head(new)
     
     Lyme disease typically happens around the 60 degrees range. cleaned for better format for the chart.
     
-=======
+
 ## Lyme disease typically happens around the 60 degrees range. cleaned for better format for the chart.
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
@@ -548,14 +535,8 @@ new %>%
 
 ## Scatterplot to show what temperatures the most cases occur at
 
-<<<<<<< HEAD
 
-## Answers to the questions raised
 
-## Conclusion
-
-=======
->>>>>>> ce00f3bbc2282f14f662fa252d251da61cdbd7dd
 ## Grahps for temperature and number of lyme dieases cases
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
