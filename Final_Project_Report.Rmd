@@ -580,10 +580,9 @@ Temp %>%
 
 ggplot(honk, aes(x = state, weight = temp9701)) + geom_bar() + coord_flip() + ylab('Temp')
 
-
-
-
 ```
+
+#We found that between 55-65 farenheit are where most of the lyme disease cases start to peak. We modeled lyme disease cases verus temperature throughout the yers 1992-2011. The pattern was consistent through the years the the avg temperaute of 60 f was very dangerous due to the amount of high cases of lyme disease.
 
 
 
