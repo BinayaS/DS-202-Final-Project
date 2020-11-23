@@ -143,7 +143,6 @@ __Average precipitation__
 
 * 2007-11: 28.70
 
-##Plotted average Prec
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 avgPrec <- means %>%
   filter(str_detect(Measure, "^prec"))
