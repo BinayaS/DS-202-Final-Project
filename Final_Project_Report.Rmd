@@ -885,3 +885,5 @@ ggscatter(all, x = "allprec", y = "allLyme", add = "reg.line", conf.int = TRUE, 
   * States matching this description were mostly in the northeast.
 
 ## Conclusion
+
+* In conclusion, Lyme disease increased a lot in the United States during those 20 years, and both temperature and precipitation played a big role in the growth of Lyme disease. For temperature, the average temperature in the United States during those 20 years didn't change much, but it stayed in the range of 60 to 65 degrees Fahrenheit, which is the optimal temperature range for lyme disease.In terms of precipitation, the average rainfall in the United States increased during those 20 years, and the incidence of Lyme disease was significantly higher in areas with high precipitation than in areas with low precipitation, so both temperature and precipitation contributed to the increase of Lymn disease.
