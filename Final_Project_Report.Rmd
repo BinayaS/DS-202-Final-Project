@@ -302,10 +302,6 @@ regionpiv %>%
     geom_bar(position="stack", stat="identity") + coord_flip() + labs(title="52-week Cumulative of Lyme Disease cases by US Region", y="Total cases", x="Region") + scale_fill_discrete(name = "Cumulative cases per year", labels = c("2007", "2008", "2009", "2010", "2011"))
 ```
 
-***
-
-### Lyme Disease Affected State from 2007-2011
-
 * States that are affected are align with the CDC region data
 
 * States are mostly located northeast or north of the Midwest
@@ -338,10 +334,6 @@ ggplot() + geom_path(data=ltpmap,
             aes(x=long, y=lat, label=state), color='black') +
   labs(title="US States With > 1000 Cases", fill="Total Cases")
 ```
-
-***
-
-### Lyme Disease Affected Counties from 2007-2011
 
 * Counties in the Northeast are located close to the ocean
 
@@ -387,23 +379,11 @@ ggplot() + geom_path(data=ltp2map,
 
 ```
 
-***
 
-### Temperature Difference in US between 2007-2011
 
-* Temperatures in the Northeast are lower than the others
 
-* Indicates that the disease is carried by ticks that favor lower temperatures
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-ltp %>%
-  left_join(sName, by="region") %>%
-  ggplot(aes(x=long, y=lat, fill=temp0711)) + geom_polygon(aes(group=group)) + coord_map() + 
-  scale_fill_continuous(low='tan1', high='darkred', guide='colorbar') +
-  labs(title="Temperature Levels in US", fill="Temp (F)")
-```
 
-***
 
 
 
@@ -702,9 +682,24 @@ ltp %>%
 ```  
 
 ## Answers to the questions raised
-We found that areas with lower temperatures and higher levels of precipitation were where most of the cases occurred. 
-Around 60 degrees farenheit was the peak temperature throughout every year. 
-States matching this description were mostly in the northeast.
+
+  1. Has Lyme disease increased from 1992?(Overall and states)
+  
+  2. Which states have the highest rate of Lyme Disease?
+  
+  3. What changes have happened to the average temperature（Overall and states)?
+  
+  4. Is there any association with the rate of Lyme disease and the changes to temperature?
+  Around 60 degrees fahrenheit was the peak temperature throughout every year. That 55-65 degrees was the most        dangerous for the high amount of cases of lyme diseases.
+  
+  5. What changes have happened to the average temperature?
+  It stayed very close to eachother, in the range of 61-63 degree fahrenheit. It did not change much with an         overall average of about 63.5.
+               
+  6. Is there any association with the rate of Lyme disease and the changes to precipitation?
+  we found that areas with lower temperatures and higher levels of precipitation were where most of the cases        occurred. 
+  
+  
+  States matching this description were mostly in the northeast.
 
 
 ## Conclusion
