@@ -282,8 +282,6 @@ LDdataG <- LDdataG %>% pivot_longer(names_to = "ConfirmedCount", values_to = "Co
 
 ***
 
-### Temperature part: 
-
 ### Lyme Disease Affected Region from 2007-2011
 
 We can see that the distribution of lyme disease is mainly around the Mid Atlantic and New England region. These regions are part of the north eastern part of the US. This finding matches with the map data shown previously.
@@ -304,7 +302,9 @@ regionpiv %>%
     geom_bar(position="stack", stat="identity") + coord_flip() + labs(title="52-week Cumulative of Lyme Disease cases by US Region", y="Total cases", x="Region") + scale_fill_discrete(name = "Cumulative cases per year", labels = c("2007", "2008", "2009", "2010", "2011"))
 ```
 
+***
 
+### Lyme Disease Affected State from 2007-2011
 
 * States that are affected are align with the CDC region data
 
@@ -338,6 +338,10 @@ ggplot() + geom_path(data=ltpmap,
             aes(x=long, y=lat, label=state), color='black') +
   labs(title="US States With > 1000 Cases", fill="Total Cases")
 ```
+
+***
+
+### Lyme Disease Affected Counties from 2007-2011
 
 * Counties in the Northeast are located close to the ocean
 
@@ -383,22 +387,12 @@ ggplot() + geom_path(data=ltp2map,
 
 ```
 
+***
 
+### The change of average temperature in the U.S. and each states may affect the rate of Lymn disease.
 
+The average temperature for each state varies by a lot.
 
-
-
-
-
-
-
-
-
-
-
-
-#### The change of average temperature in the U.S. and each states may affect the rate of Lymn disease.
-* Average Temperature of 50 states over 20 years
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 Temp<-read.csv("AveTempState.csv")
 Temp2<-Temp %>%
@@ -410,7 +404,12 @@ ggplot(Temp2,aes(y=State,weight=Ave_Temp)) + geom_bar() +
 
 ```
 
-* Average Temperature in the U.S.
+***
+
+### Average Temperature over 20 years
+
+The average temperature in the United States has been between 60 and 65 degrees Fahrenheit over 20 years.
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 Temp3<- Temp%>%
   group_by(Year)%>%
@@ -419,14 +418,25 @@ ggplot(Temp3,aes(x=Year,weight=Ave_Temp)) + geom_bar() +
   labs(title = "Average Temperature over 20 years") + theme(plot.title = element_text(hjust = 0.5))
 ```
 
-* See how has the average temperature in the United States changed over 20 years.
+***
+
+### Temperature Changes from 1992-2011
+
+Here we can see how has the average temperature in the United States has changed over 20 years.
+
+Although the average temperature in these states may rise or fall each year, the overall trend of average temperature is still a gradual upward trend.
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 ggplot(Temp3,aes(x=Year,y=Ave_Temp)) + geom_point(color="black") + stat_smooth(method = "lm", col = "red")+
   labs(title = "Average Temperature changes over 20 years") + theme(plot.title = element_text(hjust = 0.5))
 ```
 
-    
-* See correlation between Temp and Lymn disease.
+***
+
+### Amount of Lyme Disease for Different Temperatures
+
+Here we can see the correlation between Temp and Lymn disease.
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 
 library(ggplot2)
@@ -457,6 +467,64 @@ d0711
 
 ```
 
+***
+
+### Peak temperatures for lyme disease
+
+We can see that when the above graphs are combined together that Lyme disease typically happens when the temperature is around the range of 60 degrees.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+LymeTempPrec2<- LymeTempPrec %>%
+  select(full:temp0711)
+new <- LymeTempPrec2 %>%
+  pivot_longer(lyme9296:temp0711, names_to = "measure", values_to = "value")
+new$date<-substr(new$measure, nchar(new$measure) - 3, nchar(new$measure))
+new$measure <- substr(new$measure, 1, 4)
+new <- new %>%
+  pivot_wider(names_from = "measure", values_from = "value")
+new %>%
+  ggplot(aes(x=temp, y=lyme, color=date)) + geom_point()
+```
+
+*** 
+
+### Association of Lyme disease to changes in Temperature
+
+We found that between 55-65 fahrenheit are where most of the lyme disease cases start to peak. We modeled lyme disease cases versus temperature throughout the years 1992-2011. The pattern was consistent through the years the the avg temperate of 60 f was very dangerous due to the amount of high cases of lyme disease.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(readr)
 library(ggplot2)
@@ -466,12 +534,6 @@ LymeTempPrec<- read_csv("LymeTempPrec3.csv")
 LymeTempPrec<- read_csv("./LymeTempPrec3.csv")
 #head(LymeTempPrec)
 ```
-
-    We found that between 55-65 farenheit are where most of the lyme disease cases start to peak. We modeled lyme disease cases verus temperature throughout the yers 1992-2011. The pattern was consistent through the years the the avg temperaute of 60 f was very dangerous due to the amount of high cases of lyme disease.
-
-***
-
-
 
     Found averages
 
@@ -586,32 +648,6 @@ ggplot(avgPrec, aes(x=Measure, y=Average)) +
 ```
 
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(tidyverse)
-LymeTempPrec2<- LymeTempPrec %>%
-  select(full:temp0711)
-new <- LymeTempPrec2 %>%
-  pivot_longer(lyme9296:temp0711, names_to = "measure", values_to = "value")
-new$date<-substr(new$measure, nchar(new$measure) - 3, nchar(new$measure))
-new$measure <- substr(new$measure, 1, 4)
-head(new)
-```
-##Scatterplot showing the temperatures when the most cases occur
-##Found that most cases occur at around 60 degrees
-
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-new <- new %>%
-  pivot_wider(names_from = "measure", values_from = "value")
-head(new)
-```
-
-
-## Lyme disease typically happens around the 60 degrees range. cleaned for better format for the chart.
-
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-new %>%
-  ggplot(aes(x=temp, y=lyme, color=date)) + geom_point()
-```
 
 
 ## Scatterplot to show what temperatures the most cases occur at
