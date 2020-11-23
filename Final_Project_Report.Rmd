@@ -282,9 +282,8 @@ LDdataG <- LDdataG %>% pivot_longer(names_to = "ConfirmedCount", values_to = "Co
 
 ***
 
-<<<<<<< HEAD
 ### Temperature part: 
-=======
+
 ### Lyme Disease Affected Region from 2007-2011
 
 We can see that the distribution of lyme disease is mainly around the Mid Atlantic and New England region. These regions are part of the north eastern part of the US. This finding matches with the map data shown previously.
@@ -304,6 +303,8 @@ regionpiv %>%
   ggplot(aes(fill=cumu, y=value, x=reorder(area, value))) + 
     geom_bar(position="stack", stat="identity") + coord_flip() + labs(title="52-week Cumulative of Lyme Disease cases by US Region", y="Total cases", x="Region") + scale_fill_discrete(name = "Cumulative cases per year", labels = c("2007", "2008", "2009", "2010", "2011"))
 ```
+
+
 
 * States that are affected are align with the CDC region data
 
@@ -392,7 +393,9 @@ ggplot() + geom_path(data=ltp2map,
 
 
 
->>>>>>> e4e77f33bcd8094e547c5e48f65370881f0492eb
+
+
+
 
 #### The change of average temperature in the U.S. and each states may affect the rate of Lymn disease.
 * Average Temperature of 50 states over 20 years
