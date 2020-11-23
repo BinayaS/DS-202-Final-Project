@@ -87,6 +87,268 @@ __According to the CDC:__
 ## The pipeline for obtaining and cleaning the dataset
 
 ***
+##cleaning of the stations txt file
+
+```{r}
+stations <- read.delim("ghcnd-stations.txt", header = FALSE, quote = "", row.names = NULL, 
+                 stringsAsFactors = FALSE)
+df <- data.frame(stations)
+
+col1 <- df %>% mutate(country = substring(V1, 1, 2))
+col1 <- col1 %>% mutate(state = substring(V1, 39, 40))
+col1 <- col1 %>% mutate(code1 = substring(V1, 1, 11))
+col1 <- col1 %>% mutate(code2 = substring(V1, 3, 11))
+col1 <- col1 %>% select(2:5)
+confilt <- filter(col1, country == "US" )
+head(confilt)
+
+```
+
+##cleaning of prec data
+##adding the text file to the dataframe
+##Merging csv files and grouping by the state by the info in txt file
+
+```{r}
+library(tidyverse)
+
+T1992 <- read.csv("mP1992.csv")
+T1993 <- read.csv("mP1993.csv")
+T1994 <- read.csv("mP1994.csv")
+T1995 <- read.csv("mP1995.csv")
+T1996 <- read.csv("mP1996.csv")
+T1997 <- read.csv("mP1997.csv")
+T1998 <- read.csv("mP1998.csv")
+T1999 <- read.csv("mP1999.csv")
+T2000 <- read.csv("mP2000.csv")
+T2001 <- read.csv("mP2001.csv")
+T2002 <- read.csv("mP2002.csv")
+T2003 <- read.csv("mP2003.csv")
+T2004 <- read.csv("mP2004.csv")
+T2005 <- read.csv("mP2005.csv")
+T2006 <- read.csv("mP2006.csv")
+T2007 <- read.csv("mP2007.csv")
+T2008 <- read.csv("mP2008.csv")
+T2009 <- read.csv("mP2009.csv")
+T2010 <- read.csv("mP2010.csv")
+T2011 <- read.csv("mP2011.csv")
+states <- confilt
+
+head(states)
+
+m9293 <- merge(T1992, T1993,by=c("code"))
+m9394 <- merge(m9293, T1994,by=c("code"))
+m9495 <- merge(m9394, T1995,by=c("code"))
+m9596 <- merge(m9495, T1996,by=c("code"))
+m9697 <- merge(m9596, T1997,by=c("code"))
+m9798 <- merge(m9697, T1998,by=c("code"))
+m9899 <- merge(m9798, T1999,by=c("code"))
+m9900 <- merge(m9899, T2000,by=c("code"))
+m0001 <- merge(m9900, T2001,by=c("code"))
+m0102 <- merge(m0001, T2002,by=c("code"))
+m0203 <- merge(m0102, T2003,by=c("code"))
+m0304 <- merge(m0203, T2004,by=c("code"))
+m0405 <- merge(m0304, T2005,by=c("code"))
+m0506 <- merge(m0405, T2006,by=c("code"))
+m0607 <- merge(m0506, T2007,by=c("code"))
+m0708 <- merge(m0607, T2008,by=c("code"))
+m0809 <- merge(m0708, T2009,by=c("code"))
+m0910 <- merge(m0809, T2010,by=c("code"))
+
+finalTemp <- merge(m0910, T2011,by=c("code"))
+head(finalTemp)
+finalTemp <- finalTemp %>% dplyr::rename(code1 = code)
+finalWStatePrec <- merge(finalTemp, states,by=c("code1"))
+
+head(finalWStatePrec)
+
+
+finalWStatePrec <- finalWStatePrec %>% group_by(state) %>% summarise(across(prec1992:prec2011, mean))
+
+head(finalWStatePrec)
+```
+
+##cleaning of temp data
+##adding the text file to the dataframe
+##Merging csv files and grouping by the state by the info in txt file
+##Changing the temp data from 10th of a degree celcius to feriegnhight
+
+```{r}
+T1992 <- read.csv("mT1992.csv")
+T1993 <- read.csv("mT1993.csv")
+T1994 <- read.csv("mT1994.csv")
+T1995 <- read.csv("mT1995.csv")
+T1996 <- read.csv("mT1996.csv")
+T1997 <- read.csv("mT1997.csv")
+T1998 <- read.csv("mT1998.csv")
+T1999 <- read.csv("mT1999.csv")
+T2000 <- read.csv("mT2000.csv")
+T2001 <- read.csv("mT2001.csv")
+T2002 <- read.csv("mT2002.csv")
+T2003 <- read.csv("mT2003.csv")
+T2004 <- read.csv("mT2004.csv")
+T2005 <- read.csv("mT2005.csv")
+T2006 <- read.csv("mT2006.csv")
+T2007 <- read.csv("mT2007.csv")
+T2008 <- read.csv("mT2008.csv")
+T2009 <- read.csv("mT2009.csv")
+T2010 <- read.csv("mT2010.csv")
+T2011 <- read.csv("mT2011.csv")
+states <- confilt
+
+head(states)
+
+m9293 <- merge(T1992, T1993,by=c("code"))
+m9394 <- merge(m9293, T1994,by=c("code"))
+m9495 <- merge(m9394, T1995,by=c("code"))
+m9596 <- merge(m9495, T1996,by=c("code"))
+m9697 <- merge(m9596, T1997,by=c("code"))
+m9798 <- merge(m9697, T1998,by=c("code"))
+m9899 <- merge(m9798, T1999,by=c("code"))
+m9900 <- merge(m9899, T2000,by=c("code"))
+m0001 <- merge(m9900, T2001,by=c("code"))
+m0102 <- merge(m0001, T2002,by=c("code"))
+m0203 <- merge(m0102, T2003,by=c("code"))
+m0304 <- merge(m0203, T2004,by=c("code"))
+m0405 <- merge(m0304, T2005,by=c("code"))
+m0506 <- merge(m0405, T2006,by=c("code"))
+m0607 <- merge(m0506, T2007,by=c("code"))
+m0708 <- merge(m0607, T2008,by=c("code"))
+m0809 <- merge(m0708, T2009,by=c("code"))
+m0910 <- merge(m0809, T2010,by=c("code"))
+finalTemp <- merge(m0910, T2011,by=c("code"))
+finalTemp <- finalTemp %>% dplyr::rename(code1 = code)
+finalWState <- merge(finalTemp, states,by=c("code1"))
+
+head(finalWState)
+
+finalWState <- finalWState %>% mutate(temp1992 = ((temp1992/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp1993 = ((temp1993/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp1994 = ((temp1994/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp1995 = ((temp1995/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp1996 = ((temp1996/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp1997 = ((temp1997/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp1998 = ((temp1998/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp1999 = ((temp1999/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2000 = ((temp2000/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2001 = ((temp2001/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2002 = ((temp2002/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2003 = ((temp2003/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2004 = ((temp2004/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2005 = ((temp2005/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2006 = ((temp2006/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2007 = ((temp2007/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2008 = ((temp2008/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2009 = ((temp2009/10) * 9/5) + 32)
+finalWState <- finalWState %>% mutate(temp2010 = ((temp2010/10) * 9/5) + 32)
+finalWStateTemp <- finalWState %>% mutate(temp2011 = ((temp2011/10) * 9/5) + 32)
+
+head(finalWStateTemp)
+
+finalWStateTemp <- finalWState %>% group_by(state) %>% summarise(across(temp1992:temp2011, mean))
+
+head(finalWStateTemp)
+                                       
+```
+
+##Combining temp, lyme and prec
+##seperating the years in prec dataframe
+
+```{r}
+lyme <- read.csv("LymeDisease_9211_county.csv")
+abb <- read.csv("stateWabbrev.csv")
+
+prec <- finalWStatePrec
+prec1 <- prec %>% select(1)
+prec9296 <- prec %>% select(2:6)
+prec9296 <- rowMeans(prec9296)
+prec9701 <- prec %>% select(7:11)
+prec9701 <- rowMeans(prec9701)
+prec0206 <- prec %>% select(12:16)
+prec0206 <- rowMeans(prec0206)
+prec0711 <- prec %>% select(17:21)
+prec0711 <- rowMeans(prec0711)
+prec2 <- cbind(prec1, prec9296, prec9701, prec0206, prec0711)
+head(prec2)
+```
+
+##temp
+##seperating the years in the temp data frame
+
+```{r}
+temp <- finalWStateTemp
+temp1 <- temp %>% select(1)
+temp9296 <- temp %>% select(2:6)
+temp9296 <- rowMeans(temp9296)
+temp9701 <- temp %>% select(7:11)
+temp9701 <- rowMeans(temp9701)
+temp0206 <- temp %>% select(12:16)
+temp0206 <- rowMeans(temp0206)
+temp0711 <- temp %>% select(17:21)
+temp0711 <- rowMeans(temp0711)
+temp2 <- cbind(temp1, temp9296, temp9701, temp0206, temp0711)
+head(temp2)
+```
+
+#cleaning the lyme disease data frame
+
+```{r, warning=FALSE, message=FALSE}
+lyme3 <- lyme %>% select(3)
+lyme5 <- lyme %>% select(5:8)
+comblyme <- cbind(lyme3,lyme5)
+
+relyme <- comblyme %>% dplyr::rename(state = StateName,  lyme9296 = ConfirmedCount_1992_1996, lyme9701 = ConfirmedCount_1997_2001, lyme0206 = ConfirmedCount_2002_2006, lyme0711 = ConfirmedCount_2007_2011)
+
+relyme$lyme9296 <- as.numeric(relyme$lyme9296)
+relyme$lyme9701 <- as.numeric(relyme$lyme9701)
+relyme$lyme0206 <- as.numeric(relyme$lyme0206)
+relyme$lyme0711 <- as.numeric(relyme$lyme0711)
+head(relyme)
+
+firstlyme <- relyme %>% select(1, 2)
+firstNa <- firstlyme %>% drop_na()
+head(firstNa)
+aglyme1 <- firstNa %>% group_by(state) %>% summarise_all(funs(sum))
+
+secondlyme <- relyme %>% select(1, 3)
+secondNa <- secondlyme %>% drop_na()
+aglyme2 <- secondNa %>% group_by(state) %>% summarise_all(funs(sum))
+
+thirdlyme <- relyme %>% select(1, 4)
+thirdNa <- thirdlyme %>% drop_na()
+aglyme3 <- thirdNa %>% group_by(state) %>% summarise_all(funs(sum))
+
+fourthlyme <- relyme %>% select(1, 5)
+fourthNa <- fourthlyme %>% drop_na()
+aglyme4 <- fourthNa %>% group_by(state) %>% summarise_all(funs(sum))
+
+comb <- merge(aglyme1, aglyme2,by=c("state"))
+comb <- merge(comb, aglyme3,by=c("state"))
+comb <- merge(comb, aglyme4,by=c("state"))
+
+head(comb)
+```
+
+##adding state abbr to lyme disease
+```{r}
+#abb
+newLyme <- comb %>% dplyr::rename(full = state)
+head(newLyme)
+newLyme <- newLyme %>% add_row(full = "Alaska", lyme9296 = 0, lyme9701 = 0, lyme0206 = 0, lyme0711 = 0)
+newLyme <- newLyme %>% add_row(full = "Hawaii", lyme9296 = 0, lyme9701 = 0, lyme0206 = 0, lyme0711 = 0)
+newLyme <- newLyme %>% add_row(full = "Montana", lyme9296 = 0, lyme9701 = 0, lyme0206 = 0, lyme0711 = 0)
+newLyme <- newLyme[-c(8),] 
+newLyme <- merge(newLyme, abb,by=c("full"))
+head(newLyme)
+```
+
+##Combining 3 data sets
+
+```{r}
+LymeTemp <- merge(newLyme, temp2,by=c("state"))
+LymeTempPrec <- merge(LymeTemp, prec2,by=c("state"))
+head(LymeTempPrec)
+```
+
 
 ## Exploratory Analysis
 
@@ -647,6 +909,41 @@ ltp %>%
   scale_fill_continuous(low='lightcyan2', high='blue', guide='colorbar') +
   labs(title="Precipitation Levels in US", fill="Prec (inch)")
 ```  
+
+##Correlation between Lyme disease and precipitation
+##The p- value is very large so the correlation is not significant
+
+```{r}
+library("ggpubr")
+```
+
+#Graphs
+```{r}
+lyme <- LymeTempPrec
+head(lyme)
+prec1 <- finalWStatePrec
+```
+
+```{r}
+justLyme <- lyme %>% select(3, 6)
+allLyme <- rowMeans(justLyme)
+
+justtemp <- lyme %>% select(7, 10)
+alltemp <- rowMeans(justtemp)
+
+justprec <- lyme %>% select(11, 14)
+allprec <- rowMeans(justprec)
+
+all <- data.frame(cbind(allLyme, alltemp, allprec))
+head(all)
+#
+
+ggscatter(all, x = "allprec", y = "allLyme", add = "reg.line", conf.int = TRUE, cor.coef = TRUE, cor.method = "pearson",xlab = "Avg Precipitation 92 to 11", ylab = "avg lyme Disease 92 to 11", main="Correlation Between Precipitation and Lyme Disease 1992 to 2011")
+
+#barplot(allprec, main = "Precipitation in state", xlab = "States")
+
+```
+
 
 ## Answers to the questions raised
 
