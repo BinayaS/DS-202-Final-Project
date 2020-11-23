@@ -302,6 +302,10 @@ regionpiv %>%
     geom_bar(position="stack", stat="identity") + coord_flip() + labs(title="52-week Cumulative of Lyme Disease cases by US Region", y="Total cases", x="Region") + scale_fill_discrete(name = "Cumulative cases per year", labels = c("2007", "2008", "2009", "2010", "2011"))
 ```
 
+***
+
+### Lyme Disease Affected State from 2007-2011
+
 * States that are affected are align with the CDC region data
 
 * States are mostly located northeast or north of the Midwest
@@ -334,6 +338,10 @@ ggplot() + geom_path(data=ltpmap,
             aes(x=long, y=lat, label=state), color='black') +
   labs(title="US States With > 1000 Cases", fill="Total Cases")
 ```
+
+***
+
+### Lyme Disease Affected Counties from 2007-2011
 
 * Counties in the Northeast are located close to the ocean
 
@@ -379,11 +387,23 @@ ggplot() + geom_path(data=ltp2map,
 
 ```
 
+***
 
+### Temperature Difference in US between 2007-2011
 
+* Temperatures in the Northeast are lower than the others
 
+* Indicates that the disease is carried by ticks that favor lower temperatures
 
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ltp %>%
+  left_join(sName, by="region") %>%
+  ggplot(aes(x=long, y=lat, fill=temp0711)) + geom_polygon(aes(group=group)) + coord_map() + 
+  scale_fill_continuous(low='tan1', high='darkred', guide='colorbar') +
+  labs(title="Temperature Levels in US", fill="Temp (F)")
+```
 
+***
 
 
 
